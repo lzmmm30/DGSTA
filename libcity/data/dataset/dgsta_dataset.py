@@ -23,12 +23,11 @@ class DGSTADataset(TrafficStatePointDataset):
         self.cluster_max_iter = config.get("cluster_max_iter", 5)
         self.cluster_method = config.get("cluster_method", "kshape")
 
-    # 由所有原始数据生成DTW矩阵 dtw_matrix
     def _get_dtw(self):
         cache_path = './libcity/cache/dataset_cache/dtw_' + self.dataset + '.npy'
         for ind, filename in enumerate(self.data_files):
             if ind == 0:
-                df = self._load_dyna(filename)  # 返回(17836,170,1)
+                df = self._load_dyna(filename)
             else:
                 df = np.concatenate((df, self._load_dyna(filename)), axis=0)
         if not os.path.exists(cache_path):
@@ -48,19 +47,17 @@ class DGSTADataset(TrafficStatePointDataset):
         # self._logger.info('Load DTW matrix from {}'.format(cache_path))
         return dtw_matrix
 
-    # 加载rel文件，super()._load_rel()调用traffic_state_dataset的_load_rel()函数
-    # 对邻接矩阵加工，得到节点之间最短距离
+
     def _load_rel(self):
         self.sd_mx = None
         super()._load_rel()
         self._logger.info('Max adj_mx value = {}'.format(self.adj_mx.max()))
-        self.sh_mx = self.adj_mx.copy()  # copy邻接矩阵 (170,170)
-        if self.type_short_path == 'hop':  # true
+        self.sh_mx = self.adj_mx.copy()
+        if self.type_short_path == 'hop':
             self.sh_mx[self.sh_mx > 0] = 1
-            self.sh_mx[self.sh_mx == 0] = 511  # 值为0的转为511
+            self.sh_mx[self.sh_mx == 0] = 511
             for i in range(self.num_nodes):
-                self.sh_mx[i, i] = 0  # 对角线元素置0
-            # 弗洛伊德最短路径 (i,j)表示点i到点j的距离
+                self.sh_mx[i, i] = 0
             for k in range(self.num_nodes):
                 for i in range(self.num_nodes):
                     for j in range(self.num_nodes):
@@ -81,9 +78,6 @@ class DGSTADataset(TrafficStatePointDataset):
                     for j in range(self.num_nodes):
                         self.sd_mx[i, j] = min(self.sd_mx[i, j], self.sd_mx[i, k] + self.sd_mx[k, j])
 
-    # 将训练集、测试集、验证集归一化并转为dataloader
-    # 加载kshape文件，变量pattern_keys
-    # 返回训练集、测试集、验证集的dataloader
     def get_data(self):
         x_train, y_train, ind_train, x_val, y_val, ind_val, x_test, y_test, ind_test = [], [], [], [], [], [], [], [], []
         if self.data is None:
@@ -92,16 +86,12 @@ class DGSTADataset(TrafficStatePointDataset):
                 x_train, y_train, ind_train, x_val, y_val, ind_val, x_test, y_test, ind_test = self._load_cache_train_val_test()
             else:
                 x_train, y_train, ind_train, x_val, y_val, ind_val, x_test, y_test, ind_test = self._generate_train_val_test()
-                # 训练集、测试集、验证集 (17836,12,170,9) np.array
-        self.feature_dim = x_train.shape[-1]  # 9
-        self.ext_dim = self.feature_dim - self.output_dim  # 9-1
-        # scaler是一个类 有mean和std两个变量 求交通流的平均值和方差
+        self.feature_dim = x_train.shape[-1]
+        self.ext_dim = self.feature_dim - self.output_dim
         self.scaler = self._get_scalar(self.scaler_type,
                                        x_train[..., :self.output_dim], y_train[..., :self.output_dim])
-        # ext_scaler也是一个类
         self.ext_scaler = self._get_scalar(self.ext_scaler_type,
                                            x_train[..., self.output_dim:], y_train[..., self.output_dim:])
-        # 归一化
         x_train[..., :self.output_dim] = self.scaler.transform(x_train[..., :self.output_dim])
         y_train[..., :self.output_dim] = self.scaler.transform(y_train[..., :self.output_dim])
         x_val[..., :self.output_dim] = self.scaler.transform(x_val[..., :self.output_dim])
@@ -122,9 +112,7 @@ class DGSTADataset(TrafficStatePointDataset):
             generate_dataloader(train_data, eval_data, test_data, self.feature_name,
                                 self.batch_size, self.num_workers, pad_with_last_sample=self.pad_with_last_sample,
                                 distributed=self.distributed)
-        # dataloader可以理解为将数据按batch分为一组一组的数据
         self.num_batches = len(self.train_dataloader)
-        # 加载kshape文件
         self.pattern_key_file = os.path.join(
             './libcity/cache/dataset_cache/', 'pattern_keys_{}_{}_{}_{}_{}_{}'.format(
                 self.cluster_method, self.dataset, self.cand_key_days, self.s_attn_size, self.n_cluster,
@@ -143,7 +131,6 @@ class DGSTADataset(TrafficStatePointDataset):
             self.pattern_keys = km.cluster_centers_
             np.save(self.pattern_key_file, self.pattern_keys)
             self._logger.info("Saved at file " + self.pattern_key_file + ".npy")
-        # 走这里
         else:
             self.pattern_keys = np.load(self.pattern_key_file + ".npy")
             self._logger.info("Loaded file " + self.pattern_key_file + ".npy")
@@ -154,14 +141,4 @@ class DGSTADataset(TrafficStatePointDataset):
                 "ext_dim": self.ext_dim, "num_nodes": self.num_nodes, "feature_dim": self.feature_dim,
                 "output_dim": self.output_dim, "num_batches": self.num_batches,
                 "dtw_matrix": self.dtw_matrix, "pattern_keys": self.pattern_keys}
-    # scaler 平均值和方差
-    # adj_mx 邻接矩阵 01
-    # sd_mx None
-    # sh_mx 节点之间最短距离
-    # ext_dim 8
-    # num_nodes 170
-    # feature_dim 9
-    # output_dim 1
-    # num_batches 669
-    # dtw_matrix (170,170)
-    # pattern_keys (16,3,1)
+

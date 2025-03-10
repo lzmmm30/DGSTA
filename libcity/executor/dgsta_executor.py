@@ -47,7 +47,6 @@ class DGSTAExecutor(TrafficStateExecutor):
         self.model.load_state_dict(state_dict_load, strict=False)
         self._logger.info("Initialize model from {}".format(initial_ckpt))
 
-    # 计算标准化的拉普拉斯矩阵
     def _calculate_normalized_laplacian(self, adj):
         adj = sp.coo_matrix(adj)
         d = np.array(adj.sum(1))
@@ -69,7 +68,6 @@ class DGSTAExecutor(TrafficStateExecutor):
         random_walk_mx = sp.eye(adj.shape[0]) - d_mat_inv.dot(adj).tocoo()
         return random_walk_mx, isolated_point_num
 
-    # 计算拉普拉斯特征映射矩阵 dem=8 (170,8)
     def _cal_lape(self, adj_mx):
         L, isolated_point_num = self._calculate_normalized_laplacian(adj_mx)
         EigVal, EigVec = np.linalg.eig(L.toarray())
@@ -80,7 +78,6 @@ class DGSTAExecutor(TrafficStateExecutor):
         laplacian_pe.require_grad = False
         return laplacian_pe
 
-    # 选择优化算法
     def _build_optimizer(self):
         self._logger.info('You select `{}` optimizer.'.format(self.learner.lower()))
         if self.learner.lower() == 'adam':
@@ -108,7 +105,6 @@ class DGSTAExecutor(TrafficStateExecutor):
                                          eps=self.lr_epsilon, weight_decay=self.weight_decay)
         return optimizer
 
-    # 选择学习率衰减策略
     def _build_lr_scheduler(self):
         if self.lr_decay:
             self._logger.info('You select `{}` lr_scheduler.'.format(self.lr_scheduler_type.lower()))
@@ -143,7 +139,6 @@ class DGSTAExecutor(TrafficStateExecutor):
             lr_scheduler = None
         return lr_scheduler
 
-    # 训练 返回最小的损失值
     def train(self, train_dataloader, eval_dataloader):
         self._logger.info('Start training ...')
         min_val_loss = float('inf')
@@ -155,8 +150,7 @@ class DGSTAExecutor(TrafficStateExecutor):
         self._logger.info("num_batches:{}".format(num_batches))
 
         batches_seen = num_batches * self._epoch_num
-        # 训练
-        for epoch_idx in range(self._epoch_num, self.epochs):  # 0~200
+        for epoch_idx in range(self._epoch_num, self.epochs):
             start_time = time.time()
             losses, batches_seen = self._train_epoch(train_dataloader, epoch_idx, batches_seen, self.loss_func)
             t1 = time.time()
@@ -165,9 +159,7 @@ class DGSTAExecutor(TrafficStateExecutor):
             if self.distributed:  # false
                 train_loss = reduce_array(train_loss, self.world_size, self.device)
             self._writer.add_scalar('training loss', train_loss, batches_seen)
-            # self._logger.info("epoch complete!")
 
-            # self._logger.info("evaluating now!")
             t2 = time.time()
             val_loss = self._valid_epoch(eval_dataloader, epoch_idx, batches_seen, self.loss_func)
             end_time = time.time()
@@ -197,7 +189,6 @@ class DGSTAExecutor(TrafficStateExecutor):
                     self.save_model(path)
                 tune.report(loss=val_loss)
 
-            # 类似退火算法，50次没有更新表示已达最优值
             if val_loss < min_val_loss:
                 wait = 0
                 if self.saved:
@@ -211,7 +202,6 @@ class DGSTAExecutor(TrafficStateExecutor):
                 if wait == self.patience and self.use_early_stop:
                     self._logger.warning('Early stopping at epoch: %d' % epoch_idx)
                     break
-        # 求平均时长
         if len(train_time) > 0:
             average_train_time = sum(train_time) / len(train_time)
             average_eval_time = sum(eval_time) / len(eval_time)
@@ -226,7 +216,7 @@ class DGSTAExecutor(TrafficStateExecutor):
         return min_val_loss
 
     def _train_epoch(self, train_dataloader, epoch_idx, batches_seen=None, loss_func=None):
-        self.model.train()  # 训练模式
+        self.model.train()
         if loss_func is None:
             if self.distributed:  # false
                 loss_func = self.model.module.calculate_loss_without_predict
@@ -234,20 +224,16 @@ class DGSTAExecutor(TrafficStateExecutor):
                 loss_func = self.model.calculate_loss_without_predict
         losses = []
 
-        # 开启 PyTorch 的异常检测模式
-        # torch.autograd.set_detect_anomaly(True)
-        
-        # 使用 tqdm 封装 train_dataloader
         train_dataloader = tqdm(train_dataloader, desc='Training')
 
         for batch in train_dataloader:
             batch.to_tensor(self.device)
-            batch_lap_pos_enc = self.lap_mx.to(self.device)  # 拉普拉斯特征分解矩阵 (170,8)
+            batch_lap_pos_enc = self.lap_mx.to(self.device)
             if self.random_flip:
-                sign_flip = torch.rand(batch_lap_pos_enc.size(1)).to(self.device)  # (1,8)
+                sign_flip = torch.rand(batch_lap_pos_enc.size(1)).to(self.device)
                 sign_flip[sign_flip >= 0.5] = 1.0
                 sign_flip[sign_flip < 0.5] = -1.0
-                batch_lap_pos_enc = batch_lap_pos_enc * sign_flip.unsqueeze(0)  # (170,8)
+                batch_lap_pos_enc = batch_lap_pos_enc * sign_flip.unsqueeze(0)
             y_true = batch['y']
             y_predicted = self.model(batch, batch_lap_pos_enc)
             loss = loss_func(y_true, y_predicted, batches_seen=batches_seen, set_loss=self.set_loss)
@@ -268,7 +254,7 @@ class DGSTAExecutor(TrafficStateExecutor):
 
     def _valid_epoch(self, eval_dataloader, epoch_idx, batches_seen=None, loss_func=None):
         with torch.no_grad():
-            self.model.eval()  # 预测阶段
+            self.model.eval()
             if loss_func is None:
                 if self.distributed:
                     loss_func = self.model.module.calculate_loss_without_predict
@@ -293,8 +279,8 @@ class DGSTAExecutor(TrafficStateExecutor):
 
     def evaluate(self, test_dataloader):
         self._logger.info('Start evaluating ...')
-        with torch.no_grad():  # 反向传播时不会自动求导
-            self.model.eval()  # 预测阶段
+        with torch.no_grad():
+            self.model.eval() 
             y_truths = []
             y_preds = []
             t1 = time.time()

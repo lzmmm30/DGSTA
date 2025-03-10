@@ -78,7 +78,6 @@ class TrafficStateDataset(AbstractDataset):
         else:
             self.adj_mx = np.zeros((len(self.geo_ids), len(self.geo_ids)), dtype=np.float32)
 
-    #  加载geo文件
     def _load_geo(self):
         geofile = pd.read_csv(self.data_path + self.geo_file + '.geo')
         self.geo_ids = list(geofile['geo_id'])
@@ -103,11 +102,8 @@ class TrafficStateDataset(AbstractDataset):
         self._logger.info("Loaded file " + self.geo_file + '.geo' + ', num_grids=' + str(len(self.geo_ids))
                           + ', grid_size=' + str((self.len_row, self.len_column)))
 
-    # 加载rel文件
-    # 生成邻接矩阵 两点之间有cost就设为1，否则为0
     def _load_rel(self):
         relfile = pd.read_csv(self.data_path + self.rel_file + '.rel')
-        # link
         self._logger.info('set_weight_link_or_dist: {}'.format(self.set_weight_link_or_dist))
         # 0
         self._logger.info('init_weight_inf_or_zero: {}'.format(self.init_weight_inf_or_zero))
@@ -168,7 +164,6 @@ class TrafficStateDataset(AbstractDataset):
     def _load_dyna(self, filename):
         raise NotImplementedError('Please implement the function `_load_dyna()`.')
 
-    # 返回（17856,170,1），特征值为traffic_flow
     def _load_dyna_3d(self, filename):
         self._logger.info("Loading file " + filename + '.dyna')
         dynafile = pd.read_csv(self.data_path + filename + '.dyna')
