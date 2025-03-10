@@ -1,0 +1,1432 @@
+2024-03-24 11:06:54,185 - INFO - Log directory: ./libcity/log
+2024-03-24 11:06:54,185 - INFO - Begin pipeline, task=traffic_state_pred, model_name=PDFormer, dataset_name=PeMS04, exp_id=59638
+2024-03-24 11:06:54,185 - INFO - {'task': 'traffic_state_pred', 'model': 'PDFormer', 'dataset': 'PeMS04', 'saved_model': True, 'train': True, 'local_rank': 0, 'initial_ckpt': None, 'dataset_class': 'PDFormerDataset', 'input_window': 12, 'output_window': 12, 'train_rate': 0.6, 'eval_rate': 0.2, 'batch_size': 16, 'add_time_in_day': True, 'add_day_in_week': True, 'step_size': 1274, 'max_epoch': 300, 'bidir': True, 'far_mask_delta': 7, 'geo_num_heads': 4, 'sem_num_heads': 2, 't_num_heads': 2, 'cluster_method': 'kshape', 'cand_key_days': 14, 'seed': 1, 'type_ln': 'pre', 'set_loss': 'huber', 'huber_delta': 2, 'mode': 'average', 'executor': 'PDFormerExecutor', 'evaluator': 'TrafficStateEvaluator', 'embed_dim': 64, 'skip_dim': 256, 'mlp_ratio': 4, 'qkv_bias': True, 'drop': 0, 'attn_drop': 0, 'drop_path': 0.3, 's_attn_size': 3, 't_attn_size': 1, 'enc_depth': 4, 'type_short_path': 'hop', 'scaler': 'standard', 'load_external': True, 'normal_external': False, 'ext_scaler': 'none', 'learner': 'adamw', 'learning_rate': 0.001, 'weight_decay': 0.05, 'lr_decay': True, 'lr_scheduler': 'cosinelr', 'lr_eta_min': 0.0001, 'lr_decay_ratio': 0.1, 'lr_warmup_epoch': 5, 'lr_warmup_init': 1e-06, 'clip_grad_norm': True, 'max_grad_norm': 5, 'use_early_stop': True, 'patience': 50, 'task_level': 0, 'use_curriculum_learning': True, 'random_flip': True, 'quan_delta': 0.25, 'dtw_delta': 5, 'cache_dataset': True, 'num_workers': 0, 'pad_with_last_sample': True, 'lape_dim': 8, 'gpu': True, 'gpu_id': 0, 'train_loss': 'none', 'epoch': 0, 'lr_epsilon': 1e-08, 'lr_beta1': 0.9, 'lr_beta2': 0.999, 'lr_alpha': 0.99, 'lr_momentum': 0, 'steps': [5, 20, 40, 70], 'lr_T_max': 30, 'lr_patience': 10, 'lr_threshold': 0.0001, 'log_level': 'INFO', 'log_every': 1, 'load_best_epoch': True, 'hyper_tune': False, 'grad_accmu_steps': 1, 'metrics': ['MAE', 'MAPE', 'RMSE', 'masked_MAE', 'masked_MAPE', 'masked_RMSE'], 'save_modes': ['csv'], 'geo': {'including_types': ['Point'], 'Point': {}}, 'rel': {'including_types': ['geo'], 'geo': {'cost': 'num'}}, 'dyna': {'including_types': ['state'], 'state': {'entity_id': 'geo_id', 'traffic_flow': 'num', 'traffic_occupancy': 'num', 'traffic_speed': 'num'}}, 'data_col': ['traffic_flow'], 'weight_col': 'cost', 'data_files': ['PeMS04'], 'geo_file': 'PeMS04', 'rel_file': 'PeMS04', 'output_dim': 1, 'time_intervals': 300, 'init_weight_inf_or_zero': 'zero', 'set_weight_link_or_dist': 'link', 'calculate_weight_adj': False, 'weight_adj_epsilon': 0, 'distributed': False, 'device': device(type='cuda', index=0), 'exp_id': 59638}
+2024-03-24 11:06:54,836 - INFO - Loaded file PeMS04.geo, num_nodes=307
+2024-03-24 11:06:54,840 - INFO - set_weight_link_or_dist: link
+2024-03-24 11:06:54,841 - INFO - init_weight_inf_or_zero: zero
+2024-03-24 11:06:54,846 - INFO - Loaded file PeMS04.rel, shape=(307, 307)
+2024-03-24 11:06:54,846 - INFO - Max adj_mx value = 1.0
+2024-03-24 11:09:13,808 - INFO - Loading file PeMS04.dyna
+2024-03-24 11:09:21,332 - INFO - Loaded file PeMS04.dyna, shape=(16992, 307, 1)
+2024-03-24 11:09:21,390 - INFO - Load DTW matrix from ./libcity/cache/dataset_cache/dtw_PeMS04.npy
+2024-03-24 11:09:21,391 - INFO - Loading ./libcity/cache/dataset_cache/pdformer_point_based_PeMS04_12_12_0.6_1_0.2_standard_16_True_True_True_True_traffic_flow.npz
+2024-03-24 11:09:46,733 - INFO - train	x: (10181, 12, 307, 9), y: (10181, 12, 307, 9), ind: (10181,)
+2024-03-24 11:09:46,734 - INFO - eval	x: (3394, 12, 307, 9), y: (3394, 12, 307, 9), ind: (3394,)
+2024-03-24 11:09:46,734 - INFO - test	x: (3394, 12, 307, 9), y: (3394, 12, 307, 9), ind: (3394,)
+2024-03-24 11:09:47,911 - INFO - StandardScaler mean: 207.22733840505313, std: 156.47765518492758
+2024-03-24 11:09:47,911 - INFO - NoneScaler
+2024-03-24 11:09:50,868 - INFO - Loaded file ./libcity/cache/dataset_cache/pattern_keys_kshape_PeMS04_14_3_16_5.npy
+2024-03-24 11:09:50,883 - INFO - Use use_curriculum_learning!
+2024-03-24 11:09:58,086 - INFO - Number of isolated points: 0
+2024-03-24 11:09:58,144 - INFO - Number of isolated points: 0
+2024-03-24 11:09:58,295 - INFO - PDFormer(
+  (pattern_embeddings): ModuleList(
+    (0): TokenEmbedding(
+      (token_embed): Linear(in_features=3, out_features=64, bias=True)
+      (norm): Identity()
+    )
+  )
+  (enc_embed_layer): DataEmbedding(
+    (value_embedding): TokenEmbedding(
+      (token_embed): Linear(in_features=1, out_features=64, bias=True)
+      (norm): Identity()
+    )
+    (position_encoding): PositionalEncoding()
+    (daytime_embedding): Embedding(1440, 64)
+    (weekday_embedding): Embedding(7, 64)
+    (spatial_embedding): LaplacianPE(
+      (embedding_lap_pos_enc): Linear(in_features=8, out_features=64, bias=True)
+    )
+    (tempp_embedding): Linear(in_features=8, out_features=64, bias=True)
+    (dropout): Dropout(p=0, inplace=False)
+  )
+  (encoder_blocks): ModuleList(
+    (0): STEncoderBlock(
+      (norm1): LayerNorm((64,), eps=1e-06, elementwise_affine=True)
+      (st_attn): STSelfAttention(
+        (pattern_q_linears): ModuleList(
+          (0): Linear(in_features=64, out_features=32, bias=True)
+        )
+        (pattern_k_linears): ModuleList(
+          (0): Linear(in_features=64, out_features=32, bias=True)
+        )
+        (pattern_v_linears): ModuleList(
+          (0): Linear(in_features=64, out_features=32, bias=True)
+        )
+        (geo_q_conv): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+        (geo_k_conv): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+        (geo_v_conv): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+        (geo_attn_drop): Dropout(p=0, inplace=False)
+        (sem_q_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (sem_k_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (sem_v_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (sem_attn_drop): Dropout(p=0, inplace=False)
+        (t_q_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (t_k_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (t_v_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (t_attn_drop): Dropout(p=0, inplace=False)
+        (proj): Linear(in_features=48, out_features=64, bias=True)
+        (proj_drop): Dropout(p=0, inplace=False)
+        (gconv): gcn(
+          (nconv): nconv()
+          (mlp): linear(
+            (mlp): Conv2d(96, 32, kernel_size=(1, 1), stride=(1, 1))
+          )
+        )
+        (reshape1): Linear(in_features=64, out_features=32, bias=True)
+        (reshape2): Linear(in_features=32, out_features=64, bias=True)
+      )
+      (drop_path): Identity()
+      (norm2): LayerNorm((64,), eps=1e-06, elementwise_affine=True)
+      (mlp): Mlp(
+        (fc1): Linear(in_features=64, out_features=256, bias=True)
+        (act): GELU()
+        (fc2): Linear(in_features=256, out_features=64, bias=True)
+        (drop): Dropout(p=0, inplace=False)
+      )
+    )
+    (1): STEncoderBlock(
+      (norm1): LayerNorm((64,), eps=1e-06, elementwise_affine=True)
+      (st_attn): STSelfAttention(
+        (pattern_q_linears): ModuleList(
+          (0): Linear(in_features=64, out_features=32, bias=True)
+        )
+        (pattern_k_linears): ModuleList(
+          (0): Linear(in_features=64, out_features=32, bias=True)
+        )
+        (pattern_v_linears): ModuleList(
+          (0): Linear(in_features=64, out_features=32, bias=True)
+        )
+        (geo_q_conv): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+        (geo_k_conv): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+        (geo_v_conv): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+        (geo_attn_drop): Dropout(p=0, inplace=False)
+        (sem_q_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (sem_k_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (sem_v_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (sem_attn_drop): Dropout(p=0, inplace=False)
+        (t_q_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (t_k_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (t_v_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (t_attn_drop): Dropout(p=0, inplace=False)
+        (proj): Linear(in_features=48, out_features=64, bias=True)
+        (proj_drop): Dropout(p=0, inplace=False)
+        (gconv): gcn(
+          (nconv): nconv()
+          (mlp): linear(
+            (mlp): Conv2d(96, 32, kernel_size=(1, 1), stride=(1, 1))
+          )
+        )
+        (reshape1): Linear(in_features=64, out_features=32, bias=True)
+        (reshape2): Linear(in_features=32, out_features=64, bias=True)
+      )
+      (drop_path): DropPath()
+      (norm2): LayerNorm((64,), eps=1e-06, elementwise_affine=True)
+      (mlp): Mlp(
+        (fc1): Linear(in_features=64, out_features=256, bias=True)
+        (act): GELU()
+        (fc2): Linear(in_features=256, out_features=64, bias=True)
+        (drop): Dropout(p=0, inplace=False)
+      )
+    )
+    (2): STEncoderBlock(
+      (norm1): LayerNorm((64,), eps=1e-06, elementwise_affine=True)
+      (st_attn): STSelfAttention(
+        (pattern_q_linears): ModuleList(
+          (0): Linear(in_features=64, out_features=32, bias=True)
+        )
+        (pattern_k_linears): ModuleList(
+          (0): Linear(in_features=64, out_features=32, bias=True)
+        )
+        (pattern_v_linears): ModuleList(
+          (0): Linear(in_features=64, out_features=32, bias=True)
+        )
+        (geo_q_conv): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+        (geo_k_conv): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+        (geo_v_conv): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+        (geo_attn_drop): Dropout(p=0, inplace=False)
+        (sem_q_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (sem_k_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (sem_v_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (sem_attn_drop): Dropout(p=0, inplace=False)
+        (t_q_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (t_k_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (t_v_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (t_attn_drop): Dropout(p=0, inplace=False)
+        (proj): Linear(in_features=48, out_features=64, bias=True)
+        (proj_drop): Dropout(p=0, inplace=False)
+        (gconv): gcn(
+          (nconv): nconv()
+          (mlp): linear(
+            (mlp): Conv2d(96, 32, kernel_size=(1, 1), stride=(1, 1))
+          )
+        )
+        (reshape1): Linear(in_features=64, out_features=32, bias=True)
+        (reshape2): Linear(in_features=32, out_features=64, bias=True)
+      )
+      (drop_path): DropPath()
+      (norm2): LayerNorm((64,), eps=1e-06, elementwise_affine=True)
+      (mlp): Mlp(
+        (fc1): Linear(in_features=64, out_features=256, bias=True)
+        (act): GELU()
+        (fc2): Linear(in_features=256, out_features=64, bias=True)
+        (drop): Dropout(p=0, inplace=False)
+      )
+    )
+    (3): STEncoderBlock(
+      (norm1): LayerNorm((64,), eps=1e-06, elementwise_affine=True)
+      (st_attn): STSelfAttention(
+        (pattern_q_linears): ModuleList(
+          (0): Linear(in_features=64, out_features=32, bias=True)
+        )
+        (pattern_k_linears): ModuleList(
+          (0): Linear(in_features=64, out_features=32, bias=True)
+        )
+        (pattern_v_linears): ModuleList(
+          (0): Linear(in_features=64, out_features=32, bias=True)
+        )
+        (geo_q_conv): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+        (geo_k_conv): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+        (geo_v_conv): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1))
+        (geo_attn_drop): Dropout(p=0, inplace=False)
+        (sem_q_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (sem_k_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (sem_v_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (sem_attn_drop): Dropout(p=0, inplace=False)
+        (t_q_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (t_k_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (t_v_conv): Conv2d(64, 16, kernel_size=(1, 1), stride=(1, 1))
+        (t_attn_drop): Dropout(p=0, inplace=False)
+        (proj): Linear(in_features=48, out_features=64, bias=True)
+        (proj_drop): Dropout(p=0, inplace=False)
+        (gconv): gcn(
+          (nconv): nconv()
+          (mlp): linear(
+            (mlp): Conv2d(96, 32, kernel_size=(1, 1), stride=(1, 1))
+          )
+        )
+        (reshape1): Linear(in_features=64, out_features=32, bias=True)
+        (reshape2): Linear(in_features=32, out_features=64, bias=True)
+      )
+      (drop_path): DropPath()
+      (norm2): LayerNorm((64,), eps=1e-06, elementwise_affine=True)
+      (mlp): Mlp(
+        (fc1): Linear(in_features=64, out_features=256, bias=True)
+        (act): GELU()
+        (fc2): Linear(in_features=256, out_features=64, bias=True)
+        (drop): Dropout(p=0, inplace=False)
+      )
+    )
+  )
+  (skip_convs): ModuleList(
+    (0): Conv2d(64, 256, kernel_size=(1, 1), stride=(1, 1))
+    (1): Conv2d(64, 256, kernel_size=(1, 1), stride=(1, 1))
+    (2): Conv2d(64, 256, kernel_size=(1, 1), stride=(1, 1))
+    (3): Conv2d(64, 256, kernel_size=(1, 1), stride=(1, 1))
+  )
+  (end_conv1): Conv2d(12, 12, kernel_size=(1, 1), stride=(1, 1))
+  (end_conv2): Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1))
+)
+2024-03-24 11:09:58,300 - INFO - pattern_embeddings.0.token_embed.weight	torch.Size([64, 3])	cuda:0	True
+2024-03-24 11:09:58,300 - INFO - pattern_embeddings.0.token_embed.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,300 - INFO - enc_embed_layer.value_embedding.token_embed.weight	torch.Size([64, 1])	cuda:0	True
+2024-03-24 11:09:58,300 - INFO - enc_embed_layer.value_embedding.token_embed.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,300 - INFO - enc_embed_layer.daytime_embedding.weight	torch.Size([1440, 64])	cuda:0	True
+2024-03-24 11:09:58,300 - INFO - enc_embed_layer.weekday_embedding.weight	torch.Size([7, 64])	cuda:0	True
+2024-03-24 11:09:58,300 - INFO - enc_embed_layer.spatial_embedding.embedding_lap_pos_enc.weight	torch.Size([64, 8])	cuda:0	True
+2024-03-24 11:09:58,300 - INFO - enc_embed_layer.spatial_embedding.embedding_lap_pos_enc.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,301 - INFO - enc_embed_layer.tempp_embedding.weight	torch.Size([64, 8])	cuda:0	True
+2024-03-24 11:09:58,301 - INFO - enc_embed_layer.tempp_embedding.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,301 - INFO - encoder_blocks.0.norm1.weight	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,301 - INFO - encoder_blocks.0.norm1.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,301 - INFO - encoder_blocks.0.st_attn.nodevec_p1	torch.Size([288, 40])	cuda:0	True
+2024-03-24 11:09:58,301 - INFO - encoder_blocks.0.st_attn.nodevec_p2	torch.Size([307, 40])	cuda:0	True
+2024-03-24 11:09:58,301 - INFO - encoder_blocks.0.st_attn.nodevec_p3	torch.Size([307, 40])	cuda:0	True
+2024-03-24 11:09:58,301 - INFO - encoder_blocks.0.st_attn.nodevec_pk	torch.Size([40, 40, 40])	cuda:0	True
+2024-03-24 11:09:58,301 - INFO - encoder_blocks.0.st_attn.pattern_q_linears.0.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,301 - INFO - encoder_blocks.0.st_attn.pattern_q_linears.0.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,301 - INFO - encoder_blocks.0.st_attn.pattern_k_linears.0.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,301 - INFO - encoder_blocks.0.st_attn.pattern_k_linears.0.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,302 - INFO - encoder_blocks.0.st_attn.pattern_v_linears.0.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,302 - INFO - encoder_blocks.0.st_attn.pattern_v_linears.0.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,302 - INFO - encoder_blocks.0.st_attn.geo_q_conv.weight	torch.Size([32, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,302 - INFO - encoder_blocks.0.st_attn.geo_q_conv.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,302 - INFO - encoder_blocks.0.st_attn.geo_k_conv.weight	torch.Size([32, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,302 - INFO - encoder_blocks.0.st_attn.geo_k_conv.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,302 - INFO - encoder_blocks.0.st_attn.geo_v_conv.weight	torch.Size([32, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,302 - INFO - encoder_blocks.0.st_attn.geo_v_conv.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,302 - INFO - encoder_blocks.0.st_attn.sem_q_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,302 - INFO - encoder_blocks.0.st_attn.sem_q_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,302 - INFO - encoder_blocks.0.st_attn.sem_k_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,302 - INFO - encoder_blocks.0.st_attn.sem_k_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,303 - INFO - encoder_blocks.0.st_attn.sem_v_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,303 - INFO - encoder_blocks.0.st_attn.sem_v_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,303 - INFO - encoder_blocks.0.st_attn.t_q_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,303 - INFO - encoder_blocks.0.st_attn.t_q_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,303 - INFO - encoder_blocks.0.st_attn.t_k_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,303 - INFO - encoder_blocks.0.st_attn.t_k_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,303 - INFO - encoder_blocks.0.st_attn.t_v_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,303 - INFO - encoder_blocks.0.st_attn.t_v_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,303 - INFO - encoder_blocks.0.st_attn.proj.weight	torch.Size([64, 48])	cuda:0	True
+2024-03-24 11:09:58,303 - INFO - encoder_blocks.0.st_attn.proj.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,303 - INFO - encoder_blocks.0.st_attn.gconv.mlp.mlp.weight	torch.Size([32, 96, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,303 - INFO - encoder_blocks.0.st_attn.gconv.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,304 - INFO - encoder_blocks.0.st_attn.reshape1.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,304 - INFO - encoder_blocks.0.st_attn.reshape1.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,304 - INFO - encoder_blocks.0.st_attn.reshape2.weight	torch.Size([64, 32])	cuda:0	True
+2024-03-24 11:09:58,304 - INFO - encoder_blocks.0.st_attn.reshape2.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,304 - INFO - encoder_blocks.0.norm2.weight	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,304 - INFO - encoder_blocks.0.norm2.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,304 - INFO - encoder_blocks.0.mlp.fc1.weight	torch.Size([256, 64])	cuda:0	True
+2024-03-24 11:09:58,304 - INFO - encoder_blocks.0.mlp.fc1.bias	torch.Size([256])	cuda:0	True
+2024-03-24 11:09:58,304 - INFO - encoder_blocks.0.mlp.fc2.weight	torch.Size([64, 256])	cuda:0	True
+2024-03-24 11:09:58,304 - INFO - encoder_blocks.0.mlp.fc2.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,304 - INFO - encoder_blocks.1.norm1.weight	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,304 - INFO - encoder_blocks.1.norm1.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,305 - INFO - encoder_blocks.1.st_attn.nodevec_p1	torch.Size([288, 40])	cuda:0	True
+2024-03-24 11:09:58,305 - INFO - encoder_blocks.1.st_attn.nodevec_p2	torch.Size([307, 40])	cuda:0	True
+2024-03-24 11:09:58,305 - INFO - encoder_blocks.1.st_attn.nodevec_p3	torch.Size([307, 40])	cuda:0	True
+2024-03-24 11:09:58,305 - INFO - encoder_blocks.1.st_attn.nodevec_pk	torch.Size([40, 40, 40])	cuda:0	True
+2024-03-24 11:09:58,305 - INFO - encoder_blocks.1.st_attn.pattern_q_linears.0.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,305 - INFO - encoder_blocks.1.st_attn.pattern_q_linears.0.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,305 - INFO - encoder_blocks.1.st_attn.pattern_k_linears.0.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,305 - INFO - encoder_blocks.1.st_attn.pattern_k_linears.0.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,305 - INFO - encoder_blocks.1.st_attn.pattern_v_linears.0.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,305 - INFO - encoder_blocks.1.st_attn.pattern_v_linears.0.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,305 - INFO - encoder_blocks.1.st_attn.geo_q_conv.weight	torch.Size([32, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,305 - INFO - encoder_blocks.1.st_attn.geo_q_conv.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,305 - INFO - encoder_blocks.1.st_attn.geo_k_conv.weight	torch.Size([32, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.geo_k_conv.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.geo_v_conv.weight	torch.Size([32, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.geo_v_conv.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.sem_q_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.sem_q_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.sem_k_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.sem_k_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.sem_v_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.sem_v_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.t_q_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.t_q_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.t_k_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.t_k_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.t_v_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.t_v_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.proj.weight	torch.Size([64, 48])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.proj.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.gconv.mlp.mlp.weight	torch.Size([32, 96, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,306 - INFO - encoder_blocks.1.st_attn.gconv.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.1.st_attn.reshape1.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.1.st_attn.reshape1.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.1.st_attn.reshape2.weight	torch.Size([64, 32])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.1.st_attn.reshape2.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.1.norm2.weight	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.1.norm2.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.1.mlp.fc1.weight	torch.Size([256, 64])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.1.mlp.fc1.bias	torch.Size([256])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.1.mlp.fc2.weight	torch.Size([64, 256])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.1.mlp.fc2.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.2.norm1.weight	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.2.norm1.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.2.st_attn.nodevec_p1	torch.Size([288, 40])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.2.st_attn.nodevec_p2	torch.Size([307, 40])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.2.st_attn.nodevec_p3	torch.Size([307, 40])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.2.st_attn.nodevec_pk	torch.Size([40, 40, 40])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.2.st_attn.pattern_q_linears.0.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.2.st_attn.pattern_q_linears.0.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.2.st_attn.pattern_k_linears.0.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,307 - INFO - encoder_blocks.2.st_attn.pattern_k_linears.0.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.pattern_v_linears.0.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.pattern_v_linears.0.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.geo_q_conv.weight	torch.Size([32, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.geo_q_conv.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.geo_k_conv.weight	torch.Size([32, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.geo_k_conv.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.geo_v_conv.weight	torch.Size([32, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.geo_v_conv.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.sem_q_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.sem_q_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.sem_k_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.sem_k_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.sem_v_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.sem_v_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.t_q_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.t_q_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.t_k_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.t_k_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.t_v_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,308 - INFO - encoder_blocks.2.st_attn.t_v_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.2.st_attn.proj.weight	torch.Size([64, 48])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.2.st_attn.proj.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.2.st_attn.gconv.mlp.mlp.weight	torch.Size([32, 96, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.2.st_attn.gconv.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.2.st_attn.reshape1.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.2.st_attn.reshape1.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.2.st_attn.reshape2.weight	torch.Size([64, 32])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.2.st_attn.reshape2.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.2.norm2.weight	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.2.norm2.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.2.mlp.fc1.weight	torch.Size([256, 64])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.2.mlp.fc1.bias	torch.Size([256])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.2.mlp.fc2.weight	torch.Size([64, 256])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.2.mlp.fc2.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.3.norm1.weight	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.3.norm1.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.3.st_attn.nodevec_p1	torch.Size([288, 40])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.3.st_attn.nodevec_p2	torch.Size([307, 40])	cuda:0	True
+2024-03-24 11:09:58,309 - INFO - encoder_blocks.3.st_attn.nodevec_p3	torch.Size([307, 40])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.nodevec_pk	torch.Size([40, 40, 40])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.pattern_q_linears.0.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.pattern_q_linears.0.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.pattern_k_linears.0.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.pattern_k_linears.0.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.pattern_v_linears.0.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.pattern_v_linears.0.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.geo_q_conv.weight	torch.Size([32, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.geo_q_conv.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.geo_k_conv.weight	torch.Size([32, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.geo_k_conv.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.geo_v_conv.weight	torch.Size([32, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.geo_v_conv.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.sem_q_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.sem_q_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.sem_k_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.sem_k_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,310 - INFO - encoder_blocks.3.st_attn.sem_v_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.st_attn.sem_v_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.st_attn.t_q_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.st_attn.t_q_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.st_attn.t_k_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.st_attn.t_k_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.st_attn.t_v_conv.weight	torch.Size([16, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.st_attn.t_v_conv.bias	torch.Size([16])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.st_attn.proj.weight	torch.Size([64, 48])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.st_attn.proj.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.st_attn.gconv.mlp.mlp.weight	torch.Size([32, 96, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.st_attn.gconv.mlp.mlp.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.st_attn.reshape1.weight	torch.Size([32, 64])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.st_attn.reshape1.bias	torch.Size([32])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.st_attn.reshape2.weight	torch.Size([64, 32])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.st_attn.reshape2.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.norm2.weight	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.norm2.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.mlp.fc1.weight	torch.Size([256, 64])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.mlp.fc1.bias	torch.Size([256])	cuda:0	True
+2024-03-24 11:09:58,311 - INFO - encoder_blocks.3.mlp.fc2.weight	torch.Size([64, 256])	cuda:0	True
+2024-03-24 11:09:58,312 - INFO - encoder_blocks.3.mlp.fc2.bias	torch.Size([64])	cuda:0	True
+2024-03-24 11:09:58,312 - INFO - skip_convs.0.weight	torch.Size([256, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,312 - INFO - skip_convs.0.bias	torch.Size([256])	cuda:0	True
+2024-03-24 11:09:58,312 - INFO - skip_convs.1.weight	torch.Size([256, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,312 - INFO - skip_convs.1.bias	torch.Size([256])	cuda:0	True
+2024-03-24 11:09:58,312 - INFO - skip_convs.2.weight	torch.Size([256, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,312 - INFO - skip_convs.2.bias	torch.Size([256])	cuda:0	True
+2024-03-24 11:09:58,312 - INFO - skip_convs.3.weight	torch.Size([256, 64, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,312 - INFO - skip_convs.3.bias	torch.Size([256])	cuda:0	True
+2024-03-24 11:09:58,312 - INFO - end_conv1.weight	torch.Size([12, 12, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,312 - INFO - end_conv1.bias	torch.Size([12])	cuda:0	True
+2024-03-24 11:09:58,312 - INFO - end_conv2.weight	torch.Size([1, 256, 1, 1])	cuda:0	True
+2024-03-24 11:09:58,312 - INFO - end_conv2.bias	torch.Size([1])	cuda:0	True
+2024-03-24 11:09:58,313 - INFO - Total parameter numbers: 811421
+2024-03-24 11:09:58,314 - INFO - You select `adamw` optimizer.
+2024-03-24 11:09:58,316 - INFO - You select `cosinelr` lr_scheduler.
+2024-03-24 11:09:58,316 - WARNING - Received none train loss func and will use the loss func defined in the model.module.
+2024-03-24 11:09:58,318 - INFO - Number of isolated points: 0
+2024-03-24 11:09:58,432 - INFO - Start training ...
+2024-03-24 11:09:58,433 - INFO - num_batches:637
+2024-03-24 11:09:58,593 - INFO - Training: task_level increase from 0 to 1
+2024-03-24 11:09:58,593 - INFO - Current batches_seen is 0
+2024-03-24 11:12:01,521 - INFO - epoch complete!
+2024-03-24 11:12:01,522 - INFO - evaluating now!
+2024-03-24 11:12:13,085 - INFO - Epoch [0/300] (637) train_loss: 239.8789, val_loss: 254.1046, lr: 0.000201, 134.65s
+2024-03-24 11:12:13,164 - INFO - Saved model at 0
+2024-03-24 11:12:13,164 - INFO - Val loss decrease from inf to 254.1046, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch0.tar
+2024-03-24 11:14:16,281 - INFO - epoch complete!
+2024-03-24 11:14:16,282 - INFO - evaluating now!
+2024-03-24 11:14:27,838 - INFO - Epoch [1/300] (1274) train_loss: 66.1322, val_loss: 193.4696, lr: 0.000401, 134.67s
+2024-03-24 11:14:27,914 - INFO - Saved model at 1
+2024-03-24 11:14:27,915 - INFO - Val loss decrease from 254.1046 to 193.4696, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch1.tar
+2024-03-24 11:14:27,969 - INFO - Training: task_level increase from 1 to 2
+2024-03-24 11:14:27,969 - INFO - Current batches_seen is 1274
+2024-03-24 11:16:30,560 - INFO - epoch complete!
+2024-03-24 11:16:30,561 - INFO - evaluating now!
+2024-03-24 11:16:42,043 - INFO - Epoch [2/300] (1911) train_loss: 43.7650, val_loss: 179.2171, lr: 0.000600, 134.13s
+2024-03-24 11:16:42,123 - INFO - Saved model at 2
+2024-03-24 11:16:42,124 - INFO - Val loss decrease from 193.4696 to 179.2171, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch2.tar
+2024-03-24 11:18:44,619 - INFO - epoch complete!
+2024-03-24 11:18:44,620 - INFO - evaluating now!
+2024-03-24 11:18:56,084 - INFO - Epoch [3/300] (2548) train_loss: 39.7619, val_loss: 179.4349, lr: 0.000800, 133.96s
+2024-03-24 11:18:56,143 - INFO - Training: task_level increase from 2 to 3
+2024-03-24 11:18:56,143 - INFO - Current batches_seen is 2548
+2024-03-24 11:20:58,528 - INFO - epoch complete!
+2024-03-24 11:20:58,529 - INFO - evaluating now!
+2024-03-24 11:21:09,968 - INFO - Epoch [4/300] (3185) train_loss: 43.8421, val_loss: 164.5216, lr: 0.000999, 133.88s
+2024-03-24 11:21:10,046 - INFO - Saved model at 4
+2024-03-24 11:21:10,047 - INFO - Val loss decrease from 179.2171 to 164.5216, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch4.tar
+2024-03-24 11:23:12,585 - INFO - epoch complete!
+2024-03-24 11:23:12,586 - INFO - evaluating now!
+2024-03-24 11:23:24,058 - INFO - Epoch [5/300] (3822) train_loss: 39.5298, val_loss: 168.5951, lr: 0.000999, 134.01s
+2024-03-24 11:23:24,116 - INFO - Training: task_level increase from 3 to 4
+2024-03-24 11:23:24,117 - INFO - Current batches_seen is 3822
+2024-03-24 11:25:26,318 - INFO - epoch complete!
+2024-03-24 11:25:26,319 - INFO - evaluating now!
+2024-03-24 11:25:37,723 - INFO - Epoch [6/300] (4459) train_loss: 40.6531, val_loss: 163.2212, lr: 0.000999, 133.66s
+2024-03-24 11:25:37,802 - INFO - Saved model at 6
+2024-03-24 11:25:37,802 - INFO - Val loss decrease from 164.5216 to 163.2212, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch6.tar
+2024-03-24 11:27:40,327 - INFO - epoch complete!
+2024-03-24 11:27:40,327 - INFO - evaluating now!
+2024-03-24 11:27:51,725 - INFO - Epoch [7/300] (5096) train_loss: 39.6559, val_loss: 163.2907, lr: 0.000998, 133.92s
+2024-03-24 11:27:51,781 - INFO - Training: task_level increase from 4 to 5
+2024-03-24 11:27:51,782 - INFO - Current batches_seen is 5096
+2024-03-24 11:29:53,852 - INFO - epoch complete!
+2024-03-24 11:29:53,852 - INFO - evaluating now!
+2024-03-24 11:30:05,281 - INFO - Epoch [8/300] (5733) train_loss: 41.1121, val_loss: 145.3129, lr: 0.000998, 133.56s
+2024-03-24 11:30:05,358 - INFO - Saved model at 8
+2024-03-24 11:30:05,358 - INFO - Val loss decrease from 163.2212 to 145.3129, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch8.tar
+2024-03-24 11:32:07,562 - INFO - epoch complete!
+2024-03-24 11:32:07,562 - INFO - evaluating now!
+2024-03-24 11:32:18,953 - INFO - Epoch [9/300] (6370) train_loss: 39.6235, val_loss: 147.3880, lr: 0.000998, 133.59s
+2024-03-24 11:32:19,011 - INFO - Training: task_level increase from 5 to 6
+2024-03-24 11:32:19,012 - INFO - Current batches_seen is 6370
+2024-03-24 11:34:21,117 - INFO - epoch complete!
+2024-03-24 11:34:21,118 - INFO - evaluating now!
+2024-03-24 11:34:32,487 - INFO - Epoch [10/300] (7007) train_loss: 41.5804, val_loss: 129.8692, lr: 0.000997, 133.53s
+2024-03-24 11:34:32,563 - INFO - Saved model at 10
+2024-03-24 11:34:32,564 - INFO - Val loss decrease from 145.3129 to 129.8692, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch10.tar
+2024-03-24 11:36:34,863 - INFO - epoch complete!
+2024-03-24 11:36:34,864 - INFO - evaluating now!
+2024-03-24 11:36:46,266 - INFO - Epoch [11/300] (7644) train_loss: 40.2444, val_loss: 130.5415, lr: 0.000996, 133.70s
+2024-03-24 11:36:46,324 - INFO - Training: task_level increase from 6 to 7
+2024-03-24 11:36:46,325 - INFO - Current batches_seen is 7644
+2024-03-24 11:38:48,430 - INFO - epoch complete!
+2024-03-24 11:38:48,431 - INFO - evaluating now!
+2024-03-24 11:38:59,774 - INFO - Epoch [12/300] (8281) train_loss: 41.4469, val_loss: 112.7505, lr: 0.000996, 133.51s
+2024-03-24 11:38:59,844 - INFO - Saved model at 12
+2024-03-24 11:38:59,845 - INFO - Val loss decrease from 129.8692 to 112.7505, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch12.tar
+2024-03-24 11:41:01,733 - INFO - epoch complete!
+2024-03-24 11:41:01,734 - INFO - evaluating now!
+2024-03-24 11:41:12,981 - INFO - Epoch [13/300] (8918) train_loss: 40.1326, val_loss: 113.2490, lr: 0.000995, 133.14s
+2024-03-24 11:41:13,037 - INFO - Training: task_level increase from 7 to 8
+2024-03-24 11:41:13,038 - INFO - Current batches_seen is 8918
+2024-03-24 11:43:14,908 - INFO - epoch complete!
+2024-03-24 11:43:14,909 - INFO - evaluating now!
+2024-03-24 11:43:26,295 - INFO - Epoch [14/300] (9555) train_loss: 41.1393, val_loss: 101.4933, lr: 0.000994, 133.31s
+2024-03-24 11:43:26,372 - INFO - Saved model at 14
+2024-03-24 11:43:26,373 - INFO - Val loss decrease from 112.7505 to 101.4933, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch14.tar
+2024-03-24 11:45:28,309 - INFO - epoch complete!
+2024-03-24 11:45:28,310 - INFO - evaluating now!
+2024-03-24 11:45:39,614 - INFO - Epoch [15/300] (10192) train_loss: 40.7456, val_loss: 102.3736, lr: 0.000994, 133.24s
+2024-03-24 11:45:39,673 - INFO - Training: task_level increase from 8 to 9
+2024-03-24 11:45:39,673 - INFO - Current batches_seen is 10192
+2024-03-24 11:47:41,848 - INFO - epoch complete!
+2024-03-24 11:47:41,848 - INFO - evaluating now!
+2024-03-24 11:47:53,247 - INFO - Epoch [16/300] (10829) train_loss: 41.3146, val_loss: 89.9020, lr: 0.000993, 133.63s
+2024-03-24 11:47:53,322 - INFO - Saved model at 16
+2024-03-24 11:47:53,322 - INFO - Val loss decrease from 101.4933 to 89.9020, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch16.tar
+2024-03-24 11:49:55,611 - INFO - epoch complete!
+2024-03-24 11:49:55,612 - INFO - evaluating now!
+2024-03-24 11:50:07,126 - INFO - Epoch [17/300] (11466) train_loss: 40.9297, val_loss: 87.2234, lr: 0.000992, 133.80s
+2024-03-24 11:50:07,202 - INFO - Saved model at 17
+2024-03-24 11:50:07,202 - INFO - Val loss decrease from 89.9020 to 87.2234, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch17.tar
+2024-03-24 11:50:07,258 - INFO - Training: task_level increase from 9 to 10
+2024-03-24 11:50:07,258 - INFO - Current batches_seen is 11466
+2024-03-24 11:52:09,528 - INFO - epoch complete!
+2024-03-24 11:52:09,529 - INFO - evaluating now!
+2024-03-24 11:52:20,909 - INFO - Epoch [18/300] (12103) train_loss: 41.9398, val_loss: 70.6431, lr: 0.000991, 133.71s
+2024-03-24 11:52:20,974 - INFO - Saved model at 18
+2024-03-24 11:52:20,975 - INFO - Val loss decrease from 87.2234 to 70.6431, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch18.tar
+2024-03-24 11:54:23,206 - INFO - epoch complete!
+2024-03-24 11:54:23,207 - INFO - evaluating now!
+2024-03-24 11:54:34,596 - INFO - Epoch [19/300] (12740) train_loss: 41.2284, val_loss: 71.7196, lr: 0.000990, 133.62s
+2024-03-24 11:54:34,653 - INFO - Training: task_level increase from 10 to 11
+2024-03-24 11:54:34,653 - INFO - Current batches_seen is 12740
+2024-03-24 11:56:36,960 - INFO - epoch complete!
+2024-03-24 11:56:36,961 - INFO - evaluating now!
+2024-03-24 11:56:48,350 - INFO - Epoch [20/300] (13377) train_loss: 42.0242, val_loss: 52.8184, lr: 0.000989, 133.75s
+2024-03-24 11:56:48,419 - INFO - Saved model at 20
+2024-03-24 11:56:48,420 - INFO - Val loss decrease from 70.6431 to 52.8184, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch20.tar
+2024-03-24 11:58:50,535 - INFO - epoch complete!
+2024-03-24 11:58:50,536 - INFO - evaluating now!
+2024-03-24 11:59:01,962 - INFO - Epoch [21/300] (14014) train_loss: 41.1165, val_loss: 54.1438, lr: 0.000988, 133.54s
+2024-03-24 11:59:02,021 - INFO - Training: task_level increase from 11 to 12
+2024-03-24 11:59:02,021 - INFO - Current batches_seen is 14014
+2024-03-24 12:01:04,148 - INFO - epoch complete!
+2024-03-24 12:01:04,149 - INFO - evaluating now!
+2024-03-24 12:01:15,522 - INFO - Epoch [22/300] (14651) train_loss: 41.6423, val_loss: 43.0329, lr: 0.000987, 133.56s
+2024-03-24 12:01:15,591 - INFO - Saved model at 22
+2024-03-24 12:01:15,591 - INFO - Val loss decrease from 52.8184 to 43.0329, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch22.tar
+2024-03-24 12:03:17,506 - INFO - epoch complete!
+2024-03-24 12:03:17,507 - INFO - evaluating now!
+2024-03-24 12:03:28,908 - INFO - Epoch [23/300] (15288) train_loss: 41.3565, val_loss: 42.0973, lr: 0.000986, 133.32s
+2024-03-24 12:03:28,976 - INFO - Saved model at 23
+2024-03-24 12:03:28,976 - INFO - Val loss decrease from 43.0329 to 42.0973, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch23.tar
+2024-03-24 12:05:31,529 - INFO - epoch complete!
+2024-03-24 12:05:31,529 - INFO - evaluating now!
+2024-03-24 12:05:43,028 - INFO - Epoch [24/300] (15925) train_loss: 41.0929, val_loss: 42.8568, lr: 0.000985, 134.05s
+2024-03-24 12:07:45,298 - INFO - epoch complete!
+2024-03-24 12:07:45,299 - INFO - evaluating now!
+2024-03-24 12:07:56,750 - INFO - Epoch [25/300] (16562) train_loss: 40.5457, val_loss: 41.3171, lr: 0.000983, 133.72s
+2024-03-24 12:07:56,827 - INFO - Saved model at 25
+2024-03-24 12:07:56,828 - INFO - Val loss decrease from 42.0973 to 41.3171, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch25.tar
+2024-03-24 12:09:38,493 - INFO - epoch complete!
+2024-03-24 12:09:38,494 - INFO - evaluating now!
+2024-03-24 12:09:46,306 - INFO - Epoch [26/300] (17199) train_loss: 40.4717, val_loss: 41.8349, lr: 0.000982, 109.48s
+2024-03-24 12:11:26,693 - INFO - epoch complete!
+2024-03-24 12:11:26,693 - INFO - evaluating now!
+2024-03-24 12:11:34,754 - INFO - Epoch [27/300] (17836) train_loss: 39.8651, val_loss: 41.2451, lr: 0.000981, 108.45s
+2024-03-24 12:11:34,791 - INFO - Saved model at 27
+2024-03-24 12:11:34,791 - INFO - Val loss decrease from 41.3171 to 41.2451, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch27.tar
+2024-03-24 12:13:15,689 - INFO - epoch complete!
+2024-03-24 12:13:15,689 - INFO - evaluating now!
+2024-03-24 12:13:23,490 - INFO - Epoch [28/300] (18473) train_loss: 39.3336, val_loss: 40.0151, lr: 0.000979, 108.70s
+2024-03-24 12:13:23,525 - INFO - Saved model at 28
+2024-03-24 12:13:23,526 - INFO - Val loss decrease from 41.2451 to 40.0151, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch28.tar
+2024-03-24 12:15:05,000 - INFO - epoch complete!
+2024-03-24 12:15:05,001 - INFO - evaluating now!
+2024-03-24 12:15:12,845 - INFO - Epoch [29/300] (19110) train_loss: 39.1461, val_loss: 41.2818, lr: 0.000978, 109.32s
+2024-03-24 12:17:02,662 - INFO - epoch complete!
+2024-03-24 12:17:02,662 - INFO - evaluating now!
+2024-03-24 12:17:10,447 - INFO - Epoch [30/300] (19747) train_loss: 38.9146, val_loss: 39.8125, lr: 0.000976, 117.60s
+2024-03-24 12:17:10,483 - INFO - Saved model at 30
+2024-03-24 12:17:10,483 - INFO - Val loss decrease from 40.0151 to 39.8125, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch30.tar
+2024-03-24 12:18:59,298 - INFO - epoch complete!
+2024-03-24 12:18:59,299 - INFO - evaluating now!
+2024-03-24 12:19:07,103 - INFO - Epoch [31/300] (20384) train_loss: 38.6948, val_loss: 40.5103, lr: 0.000975, 116.62s
+2024-03-24 12:20:56,052 - INFO - epoch complete!
+2024-03-24 12:20:56,053 - INFO - evaluating now!
+2024-03-24 12:21:03,816 - INFO - Epoch [32/300] (21021) train_loss: 38.4749, val_loss: 39.2667, lr: 0.000973, 116.71s
+2024-03-24 12:21:03,853 - INFO - Saved model at 32
+2024-03-24 12:21:03,853 - INFO - Val loss decrease from 39.8125 to 39.2667, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch32.tar
+2024-03-24 12:22:52,363 - INFO - epoch complete!
+2024-03-24 12:22:52,364 - INFO - evaluating now!
+2024-03-24 12:23:00,272 - INFO - Epoch [33/300] (21658) train_loss: 38.3967, val_loss: 39.2839, lr: 0.000972, 116.42s
+2024-03-24 12:25:01,777 - INFO - epoch complete!
+2024-03-24 12:25:01,778 - INFO - evaluating now!
+2024-03-24 12:25:13,104 - INFO - Epoch [34/300] (22295) train_loss: 38.0698, val_loss: 39.0296, lr: 0.000970, 132.83s
+2024-03-24 12:25:13,181 - INFO - Saved model at 34
+2024-03-24 12:25:13,182 - INFO - Val loss decrease from 39.2667 to 39.0296, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch34.tar
+2024-03-24 12:27:15,376 - INFO - epoch complete!
+2024-03-24 12:27:15,377 - INFO - evaluating now!
+2024-03-24 12:27:26,724 - INFO - Epoch [35/300] (22932) train_loss: 37.8258, val_loss: 39.2552, lr: 0.000968, 133.54s
+2024-03-24 12:29:28,862 - INFO - epoch complete!
+2024-03-24 12:29:28,863 - INFO - evaluating now!
+2024-03-24 12:29:40,297 - INFO - Epoch [36/300] (23569) train_loss: 37.7067, val_loss: 38.7431, lr: 0.000967, 133.57s
+2024-03-24 12:29:40,375 - INFO - Saved model at 36
+2024-03-24 12:29:40,375 - INFO - Val loss decrease from 39.0296 to 38.7431, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch36.tar
+2024-03-24 12:31:42,395 - INFO - epoch complete!
+2024-03-24 12:31:42,396 - INFO - evaluating now!
+2024-03-24 12:31:53,707 - INFO - Epoch [37/300] (24206) train_loss: 37.4884, val_loss: 38.1677, lr: 0.000965, 133.33s
+2024-03-24 12:31:53,783 - INFO - Saved model at 37
+2024-03-24 12:31:53,784 - INFO - Val loss decrease from 38.7431 to 38.1677, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch37.tar
+2024-03-24 12:33:55,721 - INFO - epoch complete!
+2024-03-24 12:33:55,722 - INFO - evaluating now!
+2024-03-24 12:34:07,071 - INFO - Epoch [38/300] (24843) train_loss: 37.3350, val_loss: 38.8304, lr: 0.000963, 133.29s
+2024-03-24 12:36:09,074 - INFO - epoch complete!
+2024-03-24 12:36:09,075 - INFO - evaluating now!
+2024-03-24 12:36:20,419 - INFO - Epoch [39/300] (25480) train_loss: 37.2241, val_loss: 37.9849, lr: 0.000961, 133.35s
+2024-03-24 12:36:20,496 - INFO - Saved model at 39
+2024-03-24 12:36:20,497 - INFO - Val loss decrease from 38.1677 to 37.9849, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch39.tar
+2024-03-24 12:38:22,416 - INFO - epoch complete!
+2024-03-24 12:38:22,416 - INFO - evaluating now!
+2024-03-24 12:38:33,735 - INFO - Epoch [40/300] (26117) train_loss: 37.2451, val_loss: 37.6726, lr: 0.000959, 133.24s
+2024-03-24 12:38:33,811 - INFO - Saved model at 40
+2024-03-24 12:38:33,811 - INFO - Val loss decrease from 37.9849 to 37.6726, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch40.tar
+2024-03-24 12:40:35,807 - INFO - epoch complete!
+2024-03-24 12:40:35,808 - INFO - evaluating now!
+2024-03-24 12:40:47,221 - INFO - Epoch [41/300] (26754) train_loss: 37.0340, val_loss: 37.4701, lr: 0.000957, 133.41s
+2024-03-24 12:40:47,299 - INFO - Saved model at 41
+2024-03-24 12:40:47,299 - INFO - Val loss decrease from 37.6726 to 37.4701, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch41.tar
+2024-03-24 12:42:49,424 - INFO - epoch complete!
+2024-03-24 12:42:49,425 - INFO - evaluating now!
+2024-03-24 12:43:00,770 - INFO - Epoch [42/300] (27391) train_loss: 36.9076, val_loss: 37.4277, lr: 0.000955, 133.47s
+2024-03-24 12:43:00,848 - INFO - Saved model at 42
+2024-03-24 12:43:00,848 - INFO - Val loss decrease from 37.4701 to 37.4277, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch42.tar
+2024-03-24 12:45:02,617 - INFO - epoch complete!
+2024-03-24 12:45:02,618 - INFO - evaluating now!
+2024-03-24 12:45:13,920 - INFO - Epoch [43/300] (28028) train_loss: 36.8384, val_loss: 38.5981, lr: 0.000953, 133.07s
+2024-03-24 12:47:15,696 - INFO - epoch complete!
+2024-03-24 12:47:15,697 - INFO - evaluating now!
+2024-03-24 12:47:27,090 - INFO - Epoch [44/300] (28665) train_loss: 36.8708, val_loss: 37.9084, lr: 0.000951, 133.17s
+2024-03-24 12:49:28,643 - INFO - epoch complete!
+2024-03-24 12:49:28,644 - INFO - evaluating now!
+2024-03-24 12:49:40,003 - INFO - Epoch [45/300] (29302) train_loss: 36.6727, val_loss: 37.2096, lr: 0.000949, 132.91s
+2024-03-24 12:49:40,077 - INFO - Saved model at 45
+2024-03-24 12:49:40,077 - INFO - Val loss decrease from 37.4277 to 37.2096, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch45.tar
+2024-03-24 12:51:41,679 - INFO - epoch complete!
+2024-03-24 12:51:41,680 - INFO - evaluating now!
+2024-03-24 12:51:53,074 - INFO - Epoch [46/300] (29939) train_loss: 36.7373, val_loss: 37.4950, lr: 0.000947, 133.00s
+2024-03-24 12:53:55,022 - INFO - epoch complete!
+2024-03-24 12:53:55,023 - INFO - evaluating now!
+2024-03-24 12:54:06,425 - INFO - Epoch [47/300] (30576) train_loss: 36.5421, val_loss: 38.5000, lr: 0.000944, 133.35s
+2024-03-24 12:56:09,217 - INFO - epoch complete!
+2024-03-24 12:56:09,218 - INFO - evaluating now!
+2024-03-24 12:56:20,636 - INFO - Epoch [48/300] (31213) train_loss: 36.3703, val_loss: 38.5591, lr: 0.000942, 134.21s
+2024-03-24 12:58:23,452 - INFO - epoch complete!
+2024-03-24 12:58:23,453 - INFO - evaluating now!
+2024-03-24 12:58:34,896 - INFO - Epoch [49/300] (31850) train_loss: 36.5089, val_loss: 37.6948, lr: 0.000940, 134.26s
+2024-03-24 13:00:38,165 - INFO - epoch complete!
+2024-03-24 13:00:38,166 - INFO - evaluating now!
+2024-03-24 13:00:49,647 - INFO - Epoch [50/300] (32487) train_loss: 36.2433, val_loss: 37.8528, lr: 0.000937, 134.75s
+2024-03-24 13:02:51,457 - INFO - epoch complete!
+2024-03-24 13:02:51,458 - INFO - evaluating now!
+2024-03-24 13:03:02,844 - INFO - Epoch [51/300] (33124) train_loss: 36.2597, val_loss: 37.0125, lr: 0.000935, 133.20s
+2024-03-24 13:03:02,913 - INFO - Saved model at 51
+2024-03-24 13:03:02,913 - INFO - Val loss decrease from 37.2096 to 37.0125, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch51.tar
+2024-03-24 13:05:04,669 - INFO - epoch complete!
+2024-03-24 13:05:04,670 - INFO - evaluating now!
+2024-03-24 13:05:16,029 - INFO - Epoch [52/300] (33761) train_loss: 36.3244, val_loss: 37.0885, lr: 0.000932, 133.12s
+2024-03-24 13:07:17,903 - INFO - epoch complete!
+2024-03-24 13:07:17,904 - INFO - evaluating now!
+2024-03-24 13:07:29,338 - INFO - Epoch [53/300] (34398) train_loss: 36.2016, val_loss: 38.1249, lr: 0.000930, 133.31s
+2024-03-24 13:09:31,136 - INFO - epoch complete!
+2024-03-24 13:09:31,137 - INFO - evaluating now!
+2024-03-24 13:09:42,550 - INFO - Epoch [54/300] (35035) train_loss: 36.2510, val_loss: 37.7346, lr: 0.000927, 133.21s
+2024-03-24 13:11:44,430 - INFO - epoch complete!
+2024-03-24 13:11:44,430 - INFO - evaluating now!
+2024-03-24 13:11:55,756 - INFO - Epoch [55/300] (35672) train_loss: 35.9706, val_loss: 36.6742, lr: 0.000925, 133.20s
+2024-03-24 13:11:55,828 - INFO - Saved model at 55
+2024-03-24 13:11:55,829 - INFO - Val loss decrease from 37.0125 to 36.6742, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch55.tar
+2024-03-24 13:13:57,669 - INFO - epoch complete!
+2024-03-24 13:13:57,670 - INFO - evaluating now!
+2024-03-24 13:14:09,107 - INFO - Epoch [56/300] (36309) train_loss: 35.9693, val_loss: 37.0923, lr: 0.000922, 133.28s
+2024-03-24 13:16:10,904 - INFO - epoch complete!
+2024-03-24 13:16:10,905 - INFO - evaluating now!
+2024-03-24 13:16:22,316 - INFO - Epoch [57/300] (36946) train_loss: 36.0725, val_loss: 37.5784, lr: 0.000920, 133.21s
+2024-03-24 13:18:24,230 - INFO - epoch complete!
+2024-03-24 13:18:24,231 - INFO - evaluating now!
+2024-03-24 13:18:35,585 - INFO - Epoch [58/300] (37583) train_loss: 35.8006, val_loss: 36.9124, lr: 0.000917, 133.27s
+2024-03-24 13:20:37,496 - INFO - epoch complete!
+2024-03-24 13:20:37,497 - INFO - evaluating now!
+2024-03-24 13:20:48,829 - INFO - Epoch [59/300] (38220) train_loss: 35.6734, val_loss: 36.9097, lr: 0.000914, 133.24s
+2024-03-24 13:22:51,430 - INFO - epoch complete!
+2024-03-24 13:22:51,431 - INFO - evaluating now!
+2024-03-24 13:23:02,883 - INFO - Epoch [60/300] (38857) train_loss: 35.8190, val_loss: 36.7440, lr: 0.000911, 134.05s
+2024-03-24 13:25:06,528 - INFO - epoch complete!
+2024-03-24 13:25:06,528 - INFO - evaluating now!
+2024-03-24 13:25:18,013 - INFO - Epoch [61/300] (39494) train_loss: 35.7086, val_loss: 37.0637, lr: 0.000908, 135.13s
+2024-03-24 13:27:21,406 - INFO - epoch complete!
+2024-03-24 13:27:21,407 - INFO - evaluating now!
+2024-03-24 13:27:32,905 - INFO - Epoch [62/300] (40131) train_loss: 35.6629, val_loss: 37.0572, lr: 0.000906, 134.89s
+2024-03-24 13:29:36,227 - INFO - epoch complete!
+2024-03-24 13:29:36,228 - INFO - evaluating now!
+2024-03-24 13:29:47,686 - INFO - Epoch [63/300] (40768) train_loss: 35.5303, val_loss: 36.2359, lr: 0.000903, 134.78s
+2024-03-24 13:29:47,766 - INFO - Saved model at 63
+2024-03-24 13:29:47,767 - INFO - Val loss decrease from 36.6742 to 36.2359, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch63.tar
+2024-03-24 13:31:50,827 - INFO - epoch complete!
+2024-03-24 13:31:50,828 - INFO - evaluating now!
+2024-03-24 13:32:02,306 - INFO - Epoch [64/300] (41405) train_loss: 35.6055, val_loss: 37.2928, lr: 0.000900, 134.54s
+2024-03-24 13:34:05,523 - INFO - epoch complete!
+2024-03-24 13:34:05,523 - INFO - evaluating now!
+2024-03-24 13:34:17,059 - INFO - Epoch [65/300] (42042) train_loss: 35.5447, val_loss: 36.6912, lr: 0.000897, 134.75s
+2024-03-24 13:36:20,270 - INFO - epoch complete!
+2024-03-24 13:36:20,270 - INFO - evaluating now!
+2024-03-24 13:36:31,757 - INFO - Epoch [66/300] (42679) train_loss: 35.5609, val_loss: 37.0509, lr: 0.000894, 134.70s
+2024-03-24 13:38:34,704 - INFO - epoch complete!
+2024-03-24 13:38:34,705 - INFO - evaluating now!
+2024-03-24 13:38:46,124 - INFO - Epoch [67/300] (43316) train_loss: 35.5602, val_loss: 36.9294, lr: 0.000891, 134.37s
+2024-03-24 13:40:48,564 - INFO - epoch complete!
+2024-03-24 13:40:48,565 - INFO - evaluating now!
+2024-03-24 13:41:00,054 - INFO - Epoch [68/300] (43953) train_loss: 35.5840, val_loss: 37.0402, lr: 0.000888, 133.93s
+2024-03-24 13:43:03,094 - INFO - epoch complete!
+2024-03-24 13:43:03,095 - INFO - evaluating now!
+2024-03-24 13:43:14,482 - INFO - Epoch [69/300] (44590) train_loss: 35.4321, val_loss: 36.5032, lr: 0.000884, 134.43s
+2024-03-24 13:45:16,792 - INFO - epoch complete!
+2024-03-24 13:45:16,793 - INFO - evaluating now!
+2024-03-24 13:45:28,325 - INFO - Epoch [70/300] (45227) train_loss: 35.4640, val_loss: 37.3050, lr: 0.000881, 133.84s
+2024-03-24 13:47:32,360 - INFO - epoch complete!
+2024-03-24 13:47:32,361 - INFO - evaluating now!
+2024-03-24 13:47:44,498 - INFO - Epoch [71/300] (45864) train_loss: 35.3088, val_loss: 36.8528, lr: 0.000878, 136.17s
+2024-03-24 13:49:46,403 - INFO - epoch complete!
+2024-03-24 13:49:46,404 - INFO - evaluating now!
+2024-03-24 13:49:57,713 - INFO - Epoch [72/300] (46501) train_loss: 35.3605, val_loss: 36.9314, lr: 0.000875, 133.21s
+2024-03-24 13:51:59,274 - INFO - epoch complete!
+2024-03-24 13:51:59,275 - INFO - evaluating now!
+2024-03-24 13:52:10,632 - INFO - Epoch [73/300] (47138) train_loss: 35.1371, val_loss: 36.3052, lr: 0.000872, 132.92s
+2024-03-24 13:54:12,131 - INFO - epoch complete!
+2024-03-24 13:54:12,132 - INFO - evaluating now!
+2024-03-24 13:54:23,497 - INFO - Epoch [74/300] (47775) train_loss: 35.1684, val_loss: 36.9076, lr: 0.000868, 132.86s
+2024-03-24 13:56:24,792 - INFO - epoch complete!
+2024-03-24 13:56:24,793 - INFO - evaluating now!
+2024-03-24 13:56:36,087 - INFO - Epoch [75/300] (48412) train_loss: 35.2116, val_loss: 36.1073, lr: 0.000865, 132.59s
+2024-03-24 13:56:36,162 - INFO - Saved model at 75
+2024-03-24 13:56:36,163 - INFO - Val loss decrease from 36.2359 to 36.1073, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch75.tar
+2024-03-24 13:58:37,564 - INFO - epoch complete!
+2024-03-24 13:58:37,565 - INFO - evaluating now!
+2024-03-24 13:58:48,841 - INFO - Epoch [76/300] (49049) train_loss: 35.1216, val_loss: 37.1736, lr: 0.000861, 132.68s
+2024-03-24 14:00:50,379 - INFO - epoch complete!
+2024-03-24 14:00:50,380 - INFO - evaluating now!
+2024-03-24 14:01:01,706 - INFO - Epoch [77/300] (49686) train_loss: 34.9493, val_loss: 36.3183, lr: 0.000858, 132.86s
+2024-03-24 14:03:03,146 - INFO - epoch complete!
+2024-03-24 14:03:03,147 - INFO - evaluating now!
+2024-03-24 14:03:14,427 - INFO - Epoch [78/300] (50323) train_loss: 35.1120, val_loss: 36.3231, lr: 0.000855, 132.72s
+2024-03-24 14:05:16,088 - INFO - epoch complete!
+2024-03-24 14:05:16,089 - INFO - evaluating now!
+2024-03-24 14:05:27,480 - INFO - Epoch [79/300] (50960) train_loss: 34.9810, val_loss: 36.3520, lr: 0.000851, 133.05s
+2024-03-24 14:07:28,966 - INFO - epoch complete!
+2024-03-24 14:07:28,966 - INFO - evaluating now!
+2024-03-24 14:07:40,285 - INFO - Epoch [80/300] (51597) train_loss: 35.0691, val_loss: 36.0225, lr: 0.000848, 132.80s
+2024-03-24 14:07:40,362 - INFO - Saved model at 80
+2024-03-24 14:07:40,363 - INFO - Val loss decrease from 36.1073 to 36.0225, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch80.tar
+2024-03-24 14:09:41,835 - INFO - epoch complete!
+2024-03-24 14:09:41,836 - INFO - evaluating now!
+2024-03-24 14:09:53,131 - INFO - Epoch [81/300] (52234) train_loss: 34.9736, val_loss: 36.7706, lr: 0.000844, 132.77s
+2024-03-24 14:11:54,664 - INFO - epoch complete!
+2024-03-24 14:11:54,665 - INFO - evaluating now!
+2024-03-24 14:12:06,044 - INFO - Epoch [82/300] (52871) train_loss: 34.9810, val_loss: 36.2049, lr: 0.000840, 132.91s
+2024-03-24 14:14:07,645 - INFO - epoch complete!
+2024-03-24 14:14:07,646 - INFO - evaluating now!
+2024-03-24 14:14:19,074 - INFO - Epoch [83/300] (53508) train_loss: 35.0303, val_loss: 36.4539, lr: 0.000837, 133.03s
+2024-03-24 14:16:20,806 - INFO - epoch complete!
+2024-03-24 14:16:20,807 - INFO - evaluating now!
+2024-03-24 14:16:32,212 - INFO - Epoch [84/300] (54145) train_loss: 34.9289, val_loss: 36.6593, lr: 0.000833, 133.14s
+2024-03-24 14:18:33,898 - INFO - epoch complete!
+2024-03-24 14:18:33,899 - INFO - evaluating now!
+2024-03-24 14:18:45,145 - INFO - Epoch [85/300] (54782) train_loss: 34.7829, val_loss: 36.3005, lr: 0.000830, 132.93s
+2024-03-24 14:20:46,697 - INFO - epoch complete!
+2024-03-24 14:20:46,698 - INFO - evaluating now!
+2024-03-24 14:20:57,998 - INFO - Epoch [86/300] (55419) train_loss: 34.8090, val_loss: 36.0669, lr: 0.000826, 132.85s
+2024-03-24 14:22:59,541 - INFO - epoch complete!
+2024-03-24 14:22:59,542 - INFO - evaluating now!
+2024-03-24 14:23:10,920 - INFO - Epoch [87/300] (56056) train_loss: 34.7962, val_loss: 36.5079, lr: 0.000822, 132.92s
+2024-03-24 14:25:12,642 - INFO - epoch complete!
+2024-03-24 14:25:12,643 - INFO - evaluating now!
+2024-03-24 14:25:24,018 - INFO - Epoch [88/300] (56693) train_loss: 34.7119, val_loss: 36.1294, lr: 0.000818, 133.10s
+2024-03-24 14:27:25,793 - INFO - epoch complete!
+2024-03-24 14:27:25,794 - INFO - evaluating now!
+2024-03-24 14:27:37,189 - INFO - Epoch [89/300] (57330) train_loss: 34.8099, val_loss: 36.6223, lr: 0.000815, 133.17s
+2024-03-24 14:29:38,741 - INFO - epoch complete!
+2024-03-24 14:29:38,742 - INFO - evaluating now!
+2024-03-24 14:29:50,042 - INFO - Epoch [90/300] (57967) train_loss: 34.7019, val_loss: 36.1287, lr: 0.000811, 132.85s
+2024-03-24 14:31:51,749 - INFO - epoch complete!
+2024-03-24 14:31:51,750 - INFO - evaluating now!
+2024-03-24 14:32:03,073 - INFO - Epoch [91/300] (58604) train_loss: 34.7675, val_loss: 36.4561, lr: 0.000807, 133.03s
+2024-03-24 14:34:04,670 - INFO - epoch complete!
+2024-03-24 14:34:04,671 - INFO - evaluating now!
+2024-03-24 14:34:16,015 - INFO - Epoch [92/300] (59241) train_loss: 34.6674, val_loss: 37.0169, lr: 0.000803, 132.94s
+2024-03-24 14:36:17,634 - INFO - epoch complete!
+2024-03-24 14:36:17,634 - INFO - evaluating now!
+2024-03-24 14:36:28,971 - INFO - Epoch [93/300] (59878) train_loss: 34.6939, val_loss: 36.2902, lr: 0.000799, 132.96s
+2024-03-24 14:38:30,615 - INFO - epoch complete!
+2024-03-24 14:38:30,616 - INFO - evaluating now!
+2024-03-24 14:38:41,954 - INFO - Epoch [94/300] (60515) train_loss: 34.5747, val_loss: 36.8287, lr: 0.000795, 132.98s
+2024-03-24 14:40:43,503 - INFO - epoch complete!
+2024-03-24 14:40:43,504 - INFO - evaluating now!
+2024-03-24 14:40:54,810 - INFO - Epoch [95/300] (61152) train_loss: 34.5886, val_loss: 35.8036, lr: 0.000791, 132.86s
+2024-03-24 14:40:54,885 - INFO - Saved model at 95
+2024-03-24 14:40:54,886 - INFO - Val loss decrease from 36.0225 to 35.8036, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch95.tar
+2024-03-24 14:42:56,596 - INFO - epoch complete!
+2024-03-24 14:42:56,597 - INFO - evaluating now!
+2024-03-24 14:43:07,972 - INFO - Epoch [96/300] (61789) train_loss: 34.6541, val_loss: 36.1846, lr: 0.000787, 133.09s
+2024-03-24 14:45:09,800 - INFO - epoch complete!
+2024-03-24 14:45:09,801 - INFO - evaluating now!
+2024-03-24 14:45:21,079 - INFO - Epoch [97/300] (62426) train_loss: 34.5676, val_loss: 36.2641, lr: 0.000783, 133.10s
+2024-03-24 14:47:22,873 - INFO - epoch complete!
+2024-03-24 14:47:22,873 - INFO - evaluating now!
+2024-03-24 14:47:34,336 - INFO - Epoch [98/300] (63063) train_loss: 34.5146, val_loss: 36.3047, lr: 0.000779, 133.26s
+2024-03-24 14:49:36,509 - INFO - epoch complete!
+2024-03-24 14:49:36,511 - INFO - evaluating now!
+2024-03-24 14:49:47,871 - INFO - Epoch [99/300] (63700) train_loss: 34.4643, val_loss: 36.2259, lr: 0.000775, 133.53s
+2024-03-24 14:51:49,864 - INFO - epoch complete!
+2024-03-24 14:51:49,865 - INFO - evaluating now!
+2024-03-24 14:52:01,215 - INFO - Epoch [100/300] (64337) train_loss: 34.5071, val_loss: 36.2017, lr: 0.000771, 133.34s
+2024-03-24 14:54:03,034 - INFO - epoch complete!
+2024-03-24 14:54:03,035 - INFO - evaluating now!
+2024-03-24 14:54:14,467 - INFO - Epoch [101/300] (64974) train_loss: 34.4615, val_loss: 36.4269, lr: 0.000767, 133.25s
+2024-03-24 14:56:16,367 - INFO - epoch complete!
+2024-03-24 14:56:16,369 - INFO - evaluating now!
+2024-03-24 14:56:27,777 - INFO - Epoch [102/300] (65611) train_loss: 34.4378, val_loss: 36.7588, lr: 0.000763, 133.31s
+2024-03-24 14:58:29,354 - INFO - epoch complete!
+2024-03-24 14:58:29,355 - INFO - evaluating now!
+2024-03-24 14:58:40,628 - INFO - Epoch [103/300] (66248) train_loss: 34.3324, val_loss: 36.1177, lr: 0.000758, 132.85s
+2024-03-24 15:00:42,219 - INFO - epoch complete!
+2024-03-24 15:00:42,220 - INFO - evaluating now!
+2024-03-24 15:00:53,584 - INFO - Epoch [104/300] (66885) train_loss: 34.4321, val_loss: 35.5682, lr: 0.000754, 132.95s
+2024-03-24 15:00:53,656 - INFO - Saved model at 104
+2024-03-24 15:00:53,657 - INFO - Val loss decrease from 35.8036 to 35.5682, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch104.tar
+2024-03-24 15:02:55,348 - INFO - epoch complete!
+2024-03-24 15:02:55,349 - INFO - evaluating now!
+2024-03-24 15:03:06,741 - INFO - Epoch [105/300] (67522) train_loss: 34.3274, val_loss: 35.4663, lr: 0.000750, 133.08s
+2024-03-24 15:03:06,817 - INFO - Saved model at 105
+2024-03-24 15:03:06,818 - INFO - Val loss decrease from 35.5682 to 35.4663, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch105.tar
+2024-03-24 15:05:08,618 - INFO - epoch complete!
+2024-03-24 15:05:08,619 - INFO - evaluating now!
+2024-03-24 15:05:19,999 - INFO - Epoch [106/300] (68159) train_loss: 34.4398, val_loss: 35.8276, lr: 0.000746, 133.18s
+2024-03-24 15:07:21,567 - INFO - epoch complete!
+2024-03-24 15:07:21,567 - INFO - evaluating now!
+2024-03-24 15:07:32,954 - INFO - Epoch [107/300] (68796) train_loss: 34.2674, val_loss: 35.6408, lr: 0.000742, 132.95s
+2024-03-24 15:09:34,609 - INFO - epoch complete!
+2024-03-24 15:09:34,609 - INFO - evaluating now!
+2024-03-24 15:09:45,898 - INFO - Epoch [108/300] (69433) train_loss: 34.2423, val_loss: 35.6583, lr: 0.000737, 132.94s
+2024-03-24 15:11:47,403 - INFO - epoch complete!
+2024-03-24 15:11:47,404 - INFO - evaluating now!
+2024-03-24 15:11:58,692 - INFO - Epoch [109/300] (70070) train_loss: 34.2895, val_loss: 35.4372, lr: 0.000733, 132.79s
+2024-03-24 15:11:58,767 - INFO - Saved model at 109
+2024-03-24 15:11:58,768 - INFO - Val loss decrease from 35.4663 to 35.4372, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch109.tar
+2024-03-24 15:14:00,371 - INFO - epoch complete!
+2024-03-24 15:14:00,372 - INFO - evaluating now!
+2024-03-24 15:14:11,801 - INFO - Epoch [110/300] (70707) train_loss: 34.1916, val_loss: 36.1246, lr: 0.000729, 133.03s
+2024-03-24 15:16:13,340 - INFO - epoch complete!
+2024-03-24 15:16:13,340 - INFO - evaluating now!
+2024-03-24 15:16:24,685 - INFO - Epoch [111/300] (71344) train_loss: 34.2474, val_loss: 35.8937, lr: 0.000724, 132.88s
+2024-03-24 15:18:26,399 - INFO - epoch complete!
+2024-03-24 15:18:26,400 - INFO - evaluating now!
+2024-03-24 15:18:37,755 - INFO - Epoch [112/300] (71981) train_loss: 34.2428, val_loss: 36.1380, lr: 0.000720, 133.07s
+2024-03-24 15:20:39,387 - INFO - epoch complete!
+2024-03-24 15:20:39,388 - INFO - evaluating now!
+2024-03-24 15:20:50,764 - INFO - Epoch [113/300] (72618) train_loss: 34.2037, val_loss: 35.5396, lr: 0.000716, 133.01s
+2024-03-24 15:22:52,298 - INFO - epoch complete!
+2024-03-24 15:22:52,299 - INFO - evaluating now!
+2024-03-24 15:23:03,659 - INFO - Epoch [114/300] (73255) train_loss: 34.1184, val_loss: 35.5685, lr: 0.000711, 132.89s
+2024-03-24 15:25:05,370 - INFO - epoch complete!
+2024-03-24 15:25:05,371 - INFO - evaluating now!
+2024-03-24 15:25:16,756 - INFO - Epoch [115/300] (73892) train_loss: 34.1936, val_loss: 35.7127, lr: 0.000707, 133.10s
+2024-03-24 15:27:18,379 - INFO - epoch complete!
+2024-03-24 15:27:18,380 - INFO - evaluating now!
+2024-03-24 15:27:29,749 - INFO - Epoch [116/300] (74529) train_loss: 34.0389, val_loss: 35.9976, lr: 0.000702, 132.99s
+2024-03-24 15:29:31,446 - INFO - epoch complete!
+2024-03-24 15:29:31,447 - INFO - evaluating now!
+2024-03-24 15:29:42,759 - INFO - Epoch [117/300] (75166) train_loss: 34.0982, val_loss: 35.6475, lr: 0.000698, 133.01s
+2024-03-24 15:31:44,289 - INFO - epoch complete!
+2024-03-24 15:31:44,290 - INFO - evaluating now!
+2024-03-24 15:31:55,540 - INFO - Epoch [118/300] (75803) train_loss: 34.1555, val_loss: 36.0672, lr: 0.000694, 132.78s
+2024-03-24 15:33:57,129 - INFO - epoch complete!
+2024-03-24 15:33:57,130 - INFO - evaluating now!
+2024-03-24 15:34:08,644 - INFO - Epoch [119/300] (76440) train_loss: 34.0478, val_loss: 35.3924, lr: 0.000689, 133.10s
+2024-03-24 15:34:08,715 - INFO - Saved model at 119
+2024-03-24 15:34:08,715 - INFO - Val loss decrease from 35.4372 to 35.3924, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch119.tar
+2024-03-24 15:36:10,527 - INFO - epoch complete!
+2024-03-24 15:36:10,528 - INFO - evaluating now!
+2024-03-24 15:36:21,904 - INFO - Epoch [120/300] (77077) train_loss: 33.9663, val_loss: 35.6503, lr: 0.000685, 133.19s
+2024-03-24 15:38:23,438 - INFO - epoch complete!
+2024-03-24 15:38:23,439 - INFO - evaluating now!
+2024-03-24 15:38:34,798 - INFO - Epoch [121/300] (77714) train_loss: 33.9625, val_loss: 35.8432, lr: 0.000680, 132.89s
+2024-03-24 15:40:36,192 - INFO - epoch complete!
+2024-03-24 15:40:36,193 - INFO - evaluating now!
+2024-03-24 15:40:47,424 - INFO - Epoch [122/300] (78351) train_loss: 33.9505, val_loss: 35.5762, lr: 0.000676, 132.63s
+2024-03-24 15:42:48,768 - INFO - epoch complete!
+2024-03-24 15:42:48,769 - INFO - evaluating now!
+2024-03-24 15:43:00,145 - INFO - Epoch [123/300] (78988) train_loss: 33.9441, val_loss: 35.7580, lr: 0.000671, 132.72s
+2024-03-24 15:45:01,831 - INFO - epoch complete!
+2024-03-24 15:45:01,832 - INFO - evaluating now!
+2024-03-24 15:45:13,225 - INFO - Epoch [124/300] (79625) train_loss: 33.8754, val_loss: 35.4949, lr: 0.000666, 133.08s
+2024-03-24 15:47:15,019 - INFO - epoch complete!
+2024-03-24 15:47:15,020 - INFO - evaluating now!
+2024-03-24 15:47:26,415 - INFO - Epoch [125/300] (80262) train_loss: 33.8930, val_loss: 36.3472, lr: 0.000662, 133.19s
+2024-03-24 15:49:28,515 - INFO - epoch complete!
+2024-03-24 15:49:28,516 - INFO - evaluating now!
+2024-03-24 15:49:39,963 - INFO - Epoch [126/300] (80899) train_loss: 33.8810, val_loss: 35.5611, lr: 0.000657, 133.55s
+2024-03-24 15:51:41,885 - INFO - epoch complete!
+2024-03-24 15:51:41,885 - INFO - evaluating now!
+2024-03-24 15:51:53,239 - INFO - Epoch [127/300] (81536) train_loss: 33.8057, val_loss: 35.4238, lr: 0.000653, 133.28s
+2024-03-24 15:53:54,693 - INFO - epoch complete!
+2024-03-24 15:53:54,694 - INFO - evaluating now!
+2024-03-24 15:54:06,038 - INFO - Epoch [128/300] (82173) train_loss: 33.7822, val_loss: 35.8653, lr: 0.000648, 132.80s
+2024-03-24 15:56:07,602 - INFO - epoch complete!
+2024-03-24 15:56:07,603 - INFO - evaluating now!
+2024-03-24 15:56:18,977 - INFO - Epoch [129/300] (82810) train_loss: 33.8344, val_loss: 35.4265, lr: 0.000644, 132.94s
+2024-03-24 15:58:20,630 - INFO - epoch complete!
+2024-03-24 15:58:20,631 - INFO - evaluating now!
+2024-03-24 15:58:32,005 - INFO - Epoch [130/300] (83447) train_loss: 33.8381, val_loss: 35.6749, lr: 0.000639, 133.03s
+2024-03-24 16:00:33,706 - INFO - epoch complete!
+2024-03-24 16:00:33,707 - INFO - evaluating now!
+2024-03-24 16:00:45,096 - INFO - Epoch [131/300] (84084) train_loss: 33.7523, val_loss: 35.5921, lr: 0.000634, 133.09s
+2024-03-24 16:02:46,796 - INFO - epoch complete!
+2024-03-24 16:02:46,796 - INFO - evaluating now!
+2024-03-24 16:02:58,062 - INFO - Epoch [132/300] (84721) train_loss: 33.7601, val_loss: 35.6178, lr: 0.000630, 132.96s
+2024-03-24 16:04:59,346 - INFO - epoch complete!
+2024-03-24 16:04:59,346 - INFO - evaluating now!
+2024-03-24 16:05:10,710 - INFO - Epoch [133/300] (85358) train_loss: 33.7090, val_loss: 35.3448, lr: 0.000625, 132.65s
+2024-03-24 16:05:10,786 - INFO - Saved model at 133
+2024-03-24 16:05:10,786 - INFO - Val loss decrease from 35.3924 to 35.3448, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch133.tar
+2024-03-24 16:07:12,443 - INFO - epoch complete!
+2024-03-24 16:07:12,444 - INFO - evaluating now!
+2024-03-24 16:07:23,808 - INFO - Epoch [134/300] (85995) train_loss: 33.7296, val_loss: 35.9558, lr: 0.000620, 133.02s
+2024-03-24 16:09:25,334 - INFO - epoch complete!
+2024-03-24 16:09:25,334 - INFO - evaluating now!
+2024-03-24 16:09:36,665 - INFO - Epoch [135/300] (86632) train_loss: 33.6081, val_loss: 35.4119, lr: 0.000616, 132.86s
+2024-03-24 16:11:38,305 - INFO - epoch complete!
+2024-03-24 16:11:38,306 - INFO - evaluating now!
+2024-03-24 16:11:49,576 - INFO - Epoch [136/300] (87269) train_loss: 33.7956, val_loss: 35.5800, lr: 0.000611, 132.91s
+2024-03-24 16:13:51,140 - INFO - epoch complete!
+2024-03-24 16:13:51,141 - INFO - evaluating now!
+2024-03-24 16:14:02,519 - INFO - Epoch [137/300] (87906) train_loss: 33.6520, val_loss: 35.5734, lr: 0.000606, 132.94s
+2024-03-24 16:16:03,954 - INFO - epoch complete!
+2024-03-24 16:16:03,955 - INFO - evaluating now!
+2024-03-24 16:16:15,269 - INFO - Epoch [138/300] (88543) train_loss: 33.5912, val_loss: 35.5988, lr: 0.000602, 132.75s
+2024-03-24 16:18:16,875 - INFO - epoch complete!
+2024-03-24 16:18:16,876 - INFO - evaluating now!
+2024-03-24 16:18:28,218 - INFO - Epoch [139/300] (89180) train_loss: 33.6325, val_loss: 35.5471, lr: 0.000597, 132.95s
+2024-03-24 16:20:29,910 - INFO - epoch complete!
+2024-03-24 16:20:29,911 - INFO - evaluating now!
+2024-03-24 16:20:41,299 - INFO - Epoch [140/300] (89817) train_loss: 33.5722, val_loss: 35.1661, lr: 0.000592, 133.08s
+2024-03-24 16:20:41,369 - INFO - Saved model at 140
+2024-03-24 16:20:41,369 - INFO - Val loss decrease from 35.3448 to 35.1661, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch140.tar
+2024-03-24 16:22:43,145 - INFO - epoch complete!
+2024-03-24 16:22:43,146 - INFO - evaluating now!
+2024-03-24 16:22:54,536 - INFO - Epoch [141/300] (90454) train_loss: 33.5202, val_loss: 35.6982, lr: 0.000588, 133.17s
+2024-03-24 16:24:56,256 - INFO - epoch complete!
+2024-03-24 16:24:56,257 - INFO - evaluating now!
+2024-03-24 16:25:07,598 - INFO - Epoch [142/300] (91091) train_loss: 33.5908, val_loss: 35.3473, lr: 0.000583, 133.06s
+2024-03-24 16:27:09,169 - INFO - epoch complete!
+2024-03-24 16:27:09,170 - INFO - evaluating now!
+2024-03-24 16:27:20,537 - INFO - Epoch [143/300] (91728) train_loss: 33.4961, val_loss: 35.3666, lr: 0.000578, 132.94s
+2024-03-24 16:29:22,255 - INFO - epoch complete!
+2024-03-24 16:29:22,256 - INFO - evaluating now!
+2024-03-24 16:29:33,621 - INFO - Epoch [144/300] (92365) train_loss: 33.4333, val_loss: 35.2772, lr: 0.000574, 133.08s
+2024-03-24 16:31:35,324 - INFO - epoch complete!
+2024-03-24 16:31:35,326 - INFO - evaluating now!
+2024-03-24 16:31:46,624 - INFO - Epoch [145/300] (93002) train_loss: 33.4392, val_loss: 35.6350, lr: 0.000569, 133.00s
+2024-03-24 16:33:48,386 - INFO - epoch complete!
+2024-03-24 16:33:48,386 - INFO - evaluating now!
+2024-03-24 16:33:59,765 - INFO - Epoch [146/300] (93639) train_loss: 33.4763, val_loss: 35.4000, lr: 0.000564, 133.14s
+2024-03-24 16:36:01,110 - INFO - epoch complete!
+2024-03-24 16:36:01,111 - INFO - evaluating now!
+2024-03-24 16:36:12,402 - INFO - Epoch [147/300] (94276) train_loss: 33.3843, val_loss: 35.3314, lr: 0.000559, 132.64s
+2024-03-24 16:38:13,790 - INFO - epoch complete!
+2024-03-24 16:38:13,791 - INFO - evaluating now!
+2024-03-24 16:38:25,081 - INFO - Epoch [148/300] (94913) train_loss: 33.4254, val_loss: 35.7823, lr: 0.000555, 132.68s
+2024-03-24 16:40:26,388 - INFO - epoch complete!
+2024-03-24 16:40:26,389 - INFO - evaluating now!
+2024-03-24 16:40:37,690 - INFO - Epoch [149/300] (95550) train_loss: 33.3814, val_loss: 35.5198, lr: 0.000550, 132.61s
+2024-03-24 16:42:39,202 - INFO - epoch complete!
+2024-03-24 16:42:39,202 - INFO - evaluating now!
+2024-03-24 16:42:50,544 - INFO - Epoch [150/300] (96187) train_loss: 33.4068, val_loss: 35.2697, lr: 0.000545, 132.85s
+2024-03-24 16:44:52,387 - INFO - epoch complete!
+2024-03-24 16:44:52,388 - INFO - evaluating now!
+2024-03-24 16:45:03,750 - INFO - Epoch [151/300] (96824) train_loss: 33.3520, val_loss: 35.1958, lr: 0.000541, 133.20s
+2024-03-24 16:47:05,661 - INFO - epoch complete!
+2024-03-24 16:47:05,662 - INFO - evaluating now!
+2024-03-24 16:47:17,109 - INFO - Epoch [152/300] (97461) train_loss: 33.3248, val_loss: 35.6849, lr: 0.000536, 133.36s
+2024-03-24 16:49:19,059 - INFO - epoch complete!
+2024-03-24 16:49:19,059 - INFO - evaluating now!
+2024-03-24 16:49:30,479 - INFO - Epoch [153/300] (98098) train_loss: 33.2604, val_loss: 35.8849, lr: 0.000531, 133.37s
+2024-03-24 16:51:32,374 - INFO - epoch complete!
+2024-03-24 16:51:32,375 - INFO - evaluating now!
+2024-03-24 16:51:43,730 - INFO - Epoch [154/300] (98735) train_loss: 33.2254, val_loss: 35.2207, lr: 0.000526, 133.25s
+2024-03-24 16:53:45,628 - INFO - epoch complete!
+2024-03-24 16:53:45,629 - INFO - evaluating now!
+2024-03-24 16:53:57,081 - INFO - Epoch [155/300] (99372) train_loss: 33.2467, val_loss: 35.4157, lr: 0.000522, 133.35s
+2024-03-24 16:55:58,982 - INFO - epoch complete!
+2024-03-24 16:55:58,983 - INFO - evaluating now!
+2024-03-24 16:56:10,425 - INFO - Epoch [156/300] (100009) train_loss: 33.1195, val_loss: 36.0391, lr: 0.000517, 133.34s
+2024-03-24 16:58:12,390 - INFO - epoch complete!
+2024-03-24 16:58:12,391 - INFO - evaluating now!
+2024-03-24 16:58:23,819 - INFO - Epoch [157/300] (100646) train_loss: 33.1871, val_loss: 35.0395, lr: 0.000512, 133.39s
+2024-03-24 16:58:23,897 - INFO - Saved model at 157
+2024-03-24 16:58:23,898 - INFO - Val loss decrease from 35.1661 to 35.0395, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch157.tar
+2024-03-24 17:00:26,150 - INFO - epoch complete!
+2024-03-24 17:00:26,151 - INFO - evaluating now!
+2024-03-24 17:00:37,565 - INFO - Epoch [158/300] (101283) train_loss: 33.1840, val_loss: 35.2355, lr: 0.000508, 133.67s
+2024-03-24 17:02:39,253 - INFO - epoch complete!
+2024-03-24 17:02:39,254 - INFO - evaluating now!
+2024-03-24 17:02:50,633 - INFO - Epoch [159/300] (101920) train_loss: 33.2261, val_loss: 35.5482, lr: 0.000503, 133.07s
+2024-03-24 17:04:52,700 - INFO - epoch complete!
+2024-03-24 17:04:52,701 - INFO - evaluating now!
+2024-03-24 17:05:04,259 - INFO - Epoch [160/300] (102557) train_loss: 33.1097, val_loss: 35.1643, lr: 0.000498, 133.62s
+2024-03-24 17:07:07,787 - INFO - epoch complete!
+2024-03-24 17:07:07,787 - INFO - evaluating now!
+2024-03-24 17:07:19,356 - INFO - Epoch [161/300] (103194) train_loss: 33.1086, val_loss: 35.1566, lr: 0.000494, 135.10s
+2024-03-24 17:09:21,323 - INFO - epoch complete!
+2024-03-24 17:09:21,323 - INFO - evaluating now!
+2024-03-24 17:09:32,796 - INFO - Epoch [162/300] (103831) train_loss: 33.0579, val_loss: 35.1470, lr: 0.000489, 133.44s
+2024-03-24 17:11:34,848 - INFO - epoch complete!
+2024-03-24 17:11:34,849 - INFO - evaluating now!
+2024-03-24 17:11:46,266 - INFO - Epoch [163/300] (104468) train_loss: 32.9969, val_loss: 35.1505, lr: 0.000484, 133.47s
+2024-03-24 17:13:48,292 - INFO - epoch complete!
+2024-03-24 17:13:48,293 - INFO - evaluating now!
+2024-03-24 17:13:59,618 - INFO - Epoch [164/300] (105105) train_loss: 33.1239, val_loss: 35.2866, lr: 0.000480, 133.35s
+2024-03-24 17:16:01,290 - INFO - epoch complete!
+2024-03-24 17:16:01,290 - INFO - evaluating now!
+2024-03-24 17:16:12,697 - INFO - Epoch [165/300] (105742) train_loss: 32.9802, val_loss: 34.8243, lr: 0.000475, 133.08s
+2024-03-24 17:16:12,780 - INFO - Saved model at 165
+2024-03-24 17:16:12,780 - INFO - Val loss decrease from 35.0395 to 34.8243, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch165.tar
+2024-03-24 17:18:14,835 - INFO - epoch complete!
+2024-03-24 17:18:14,836 - INFO - evaluating now!
+2024-03-24 17:18:26,210 - INFO - Epoch [166/300] (106379) train_loss: 32.9951, val_loss: 35.3342, lr: 0.000470, 133.43s
+2024-03-24 17:20:28,187 - INFO - epoch complete!
+2024-03-24 17:20:28,188 - INFO - evaluating now!
+2024-03-24 17:20:39,631 - INFO - Epoch [167/300] (107016) train_loss: 32.9577, val_loss: 35.1347, lr: 0.000466, 133.42s
+2024-03-24 17:22:41,562 - INFO - epoch complete!
+2024-03-24 17:22:41,563 - INFO - evaluating now!
+2024-03-24 17:22:52,930 - INFO - Epoch [168/300] (107653) train_loss: 32.9958, val_loss: 35.4973, lr: 0.000461, 133.30s
+2024-03-24 17:24:54,974 - INFO - epoch complete!
+2024-03-24 17:24:54,974 - INFO - evaluating now!
+2024-03-24 17:25:06,326 - INFO - Epoch [169/300] (108290) train_loss: 32.8967, val_loss: 35.1062, lr: 0.000456, 133.39s
+2024-03-24 17:27:08,167 - INFO - epoch complete!
+2024-03-24 17:27:08,167 - INFO - evaluating now!
+2024-03-24 17:27:19,594 - INFO - Epoch [170/300] (108927) train_loss: 32.9145, val_loss: 35.0701, lr: 0.000452, 133.27s
+2024-03-24 17:29:21,439 - INFO - epoch complete!
+2024-03-24 17:29:21,440 - INFO - evaluating now!
+2024-03-24 17:29:32,893 - INFO - Epoch [171/300] (109564) train_loss: 32.8631, val_loss: 34.9273, lr: 0.000447, 133.30s
+2024-03-24 17:31:34,937 - INFO - epoch complete!
+2024-03-24 17:31:34,938 - INFO - evaluating now!
+2024-03-24 17:31:46,354 - INFO - Epoch [172/300] (110201) train_loss: 32.8861, val_loss: 35.1032, lr: 0.000443, 133.46s
+2024-03-24 17:33:48,314 - INFO - epoch complete!
+2024-03-24 17:33:48,315 - INFO - evaluating now!
+2024-03-24 17:33:59,722 - INFO - Epoch [173/300] (110838) train_loss: 32.8428, val_loss: 34.8989, lr: 0.000438, 133.37s
+2024-03-24 17:36:01,543 - INFO - epoch complete!
+2024-03-24 17:36:01,544 - INFO - evaluating now!
+2024-03-24 17:36:13,316 - INFO - Epoch [174/300] (111475) train_loss: 32.8472, val_loss: 35.2942, lr: 0.000434, 133.59s
+2024-03-24 17:38:15,217 - INFO - epoch complete!
+2024-03-24 17:38:15,218 - INFO - evaluating now!
+2024-03-24 17:38:26,675 - INFO - Epoch [175/300] (112112) train_loss: 32.8053, val_loss: 34.9272, lr: 0.000429, 133.36s
+2024-03-24 17:40:28,406 - INFO - epoch complete!
+2024-03-24 17:40:28,407 - INFO - evaluating now!
+2024-03-24 17:40:39,797 - INFO - Epoch [176/300] (112749) train_loss: 32.8089, val_loss: 34.8879, lr: 0.000424, 133.12s
+2024-03-24 17:42:41,571 - INFO - epoch complete!
+2024-03-24 17:42:41,572 - INFO - evaluating now!
+2024-03-24 17:42:52,919 - INFO - Epoch [177/300] (113386) train_loss: 32.7445, val_loss: 34.9614, lr: 0.000420, 133.12s
+2024-03-24 17:44:54,744 - INFO - epoch complete!
+2024-03-24 17:44:54,745 - INFO - evaluating now!
+2024-03-24 17:45:06,102 - INFO - Epoch [178/300] (114023) train_loss: 32.7604, val_loss: 35.0841, lr: 0.000415, 133.18s
+2024-03-24 17:47:07,830 - INFO - epoch complete!
+2024-03-24 17:47:07,831 - INFO - evaluating now!
+2024-03-24 17:47:19,266 - INFO - Epoch [179/300] (114660) train_loss: 32.6803, val_loss: 34.8726, lr: 0.000411, 133.16s
+2024-03-24 17:49:21,158 - INFO - epoch complete!
+2024-03-24 17:49:21,159 - INFO - evaluating now!
+2024-03-24 17:49:32,567 - INFO - Epoch [180/300] (115297) train_loss: 32.6677, val_loss: 34.8350, lr: 0.000406, 133.30s
+2024-03-24 17:51:34,461 - INFO - epoch complete!
+2024-03-24 17:51:34,462 - INFO - evaluating now!
+2024-03-24 17:51:45,846 - INFO - Epoch [181/300] (115934) train_loss: 32.6857, val_loss: 35.3142, lr: 0.000402, 133.28s
+2024-03-24 17:53:47,621 - INFO - epoch complete!
+2024-03-24 17:53:47,622 - INFO - evaluating now!
+2024-03-24 17:53:59,006 - INFO - Epoch [182/300] (116571) train_loss: 32.6912, val_loss: 35.3924, lr: 0.000398, 133.16s
+2024-03-24 17:56:00,808 - INFO - epoch complete!
+2024-03-24 17:56:00,809 - INFO - evaluating now!
+2024-03-24 17:56:12,171 - INFO - Epoch [183/300] (117208) train_loss: 32.6349, val_loss: 34.7731, lr: 0.000393, 133.16s
+2024-03-24 17:56:12,237 - INFO - Saved model at 183
+2024-03-24 17:56:12,237 - INFO - Val loss decrease from 34.8243 to 34.7731, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch183.tar
+2024-03-24 17:58:14,012 - INFO - epoch complete!
+2024-03-24 17:58:14,013 - INFO - evaluating now!
+2024-03-24 17:58:25,545 - INFO - Epoch [184/300] (117845) train_loss: 32.5779, val_loss: 34.8095, lr: 0.000389, 133.31s
+2024-03-24 18:00:27,467 - INFO - epoch complete!
+2024-03-24 18:00:27,468 - INFO - evaluating now!
+2024-03-24 18:00:38,815 - INFO - Epoch [185/300] (118482) train_loss: 32.5479, val_loss: 34.9046, lr: 0.000384, 133.27s
+2024-03-24 18:02:40,650 - INFO - epoch complete!
+2024-03-24 18:02:40,650 - INFO - evaluating now!
+2024-03-24 18:02:52,020 - INFO - Epoch [186/300] (119119) train_loss: 32.5579, val_loss: 34.8667, lr: 0.000380, 133.20s
+2024-03-24 18:04:53,853 - INFO - epoch complete!
+2024-03-24 18:04:53,854 - INFO - evaluating now!
+2024-03-24 18:05:05,257 - INFO - Epoch [187/300] (119756) train_loss: 32.4791, val_loss: 34.9875, lr: 0.000376, 133.24s
+2024-03-24 18:07:07,061 - INFO - epoch complete!
+2024-03-24 18:07:07,062 - INFO - evaluating now!
+2024-03-24 18:07:18,494 - INFO - Epoch [188/300] (120393) train_loss: 32.4979, val_loss: 35.2124, lr: 0.000371, 133.24s
+2024-03-24 18:09:20,278 - INFO - epoch complete!
+2024-03-24 18:09:20,279 - INFO - evaluating now!
+2024-03-24 18:09:31,738 - INFO - Epoch [189/300] (121030) train_loss: 32.5231, val_loss: 34.7727, lr: 0.000367, 133.24s
+2024-03-24 18:09:31,807 - INFO - Saved model at 189
+2024-03-24 18:09:31,808 - INFO - Val loss decrease from 34.7731 to 34.7727, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch189.tar
+2024-03-24 18:11:33,740 - INFO - epoch complete!
+2024-03-24 18:11:33,741 - INFO - evaluating now!
+2024-03-24 18:11:45,144 - INFO - Epoch [190/300] (121667) train_loss: 32.5347, val_loss: 34.8398, lr: 0.000363, 133.34s
+2024-03-24 18:13:46,883 - INFO - epoch complete!
+2024-03-24 18:13:46,884 - INFO - evaluating now!
+2024-03-24 18:13:58,237 - INFO - Epoch [191/300] (122304) train_loss: 32.4678, val_loss: 34.7040, lr: 0.000358, 133.09s
+2024-03-24 18:13:58,309 - INFO - Saved model at 191
+2024-03-24 18:13:58,310 - INFO - Val loss decrease from 34.7727 to 34.7040, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch191.tar
+2024-03-24 18:16:00,293 - INFO - epoch complete!
+2024-03-24 18:16:00,294 - INFO - evaluating now!
+2024-03-24 18:16:11,660 - INFO - Epoch [192/300] (122941) train_loss: 32.4829, val_loss: 34.6954, lr: 0.000354, 133.35s
+2024-03-24 18:16:11,735 - INFO - Saved model at 192
+2024-03-24 18:16:11,736 - INFO - Val loss decrease from 34.7040 to 34.6954, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch192.tar
+2024-03-24 18:18:13,575 - INFO - epoch complete!
+2024-03-24 18:18:13,576 - INFO - evaluating now!
+2024-03-24 18:18:25,037 - INFO - Epoch [193/300] (123578) train_loss: 32.4417, val_loss: 34.6888, lr: 0.000350, 133.30s
+2024-03-24 18:18:25,112 - INFO - Saved model at 193
+2024-03-24 18:18:25,113 - INFO - Val loss decrease from 34.6954 to 34.6888, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch193.tar
+2024-03-24 18:20:27,083 - INFO - epoch complete!
+2024-03-24 18:20:27,084 - INFO - evaluating now!
+2024-03-24 18:20:38,463 - INFO - Epoch [194/300] (124215) train_loss: 32.4170, val_loss: 35.0502, lr: 0.000346, 133.35s
+2024-03-24 18:22:40,317 - INFO - epoch complete!
+2024-03-24 18:22:40,318 - INFO - evaluating now!
+2024-03-24 18:22:51,667 - INFO - Epoch [195/300] (124852) train_loss: 32.3175, val_loss: 34.9174, lr: 0.000342, 133.20s
+2024-03-24 18:24:53,523 - INFO - epoch complete!
+2024-03-24 18:24:53,524 - INFO - evaluating now!
+2024-03-24 18:25:04,924 - INFO - Epoch [196/300] (125489) train_loss: 32.3216, val_loss: 34.7792, lr: 0.000337, 133.26s
+2024-03-24 18:27:06,739 - INFO - epoch complete!
+2024-03-24 18:27:06,740 - INFO - evaluating now!
+2024-03-24 18:27:18,195 - INFO - Epoch [197/300] (126126) train_loss: 32.3206, val_loss: 34.8330, lr: 0.000333, 133.27s
+2024-03-24 18:29:20,130 - INFO - epoch complete!
+2024-03-24 18:29:20,131 - INFO - evaluating now!
+2024-03-24 18:29:31,533 - INFO - Epoch [198/300] (126763) train_loss: 32.3097, val_loss: 34.8354, lr: 0.000329, 133.34s
+2024-03-24 18:31:33,398 - INFO - epoch complete!
+2024-03-24 18:31:33,399 - INFO - evaluating now!
+2024-03-24 18:31:44,806 - INFO - Epoch [199/300] (127400) train_loss: 32.2840, val_loss: 34.5819, lr: 0.000325, 133.27s
+2024-03-24 18:31:44,882 - INFO - Saved model at 199
+2024-03-24 18:31:44,883 - INFO - Val loss decrease from 34.6888 to 34.5819, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch199.tar
+2024-03-24 18:33:46,567 - INFO - epoch complete!
+2024-03-24 18:33:46,568 - INFO - evaluating now!
+2024-03-24 18:33:57,923 - INFO - Epoch [200/300] (128037) train_loss: 32.2152, val_loss: 34.5145, lr: 0.000321, 133.04s
+2024-03-24 18:33:57,996 - INFO - Saved model at 200
+2024-03-24 18:33:57,996 - INFO - Val loss decrease from 34.5819 to 34.5145, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch200.tar
+2024-03-24 18:35:59,731 - INFO - epoch complete!
+2024-03-24 18:35:59,732 - INFO - evaluating now!
+2024-03-24 18:36:11,147 - INFO - Epoch [201/300] (128674) train_loss: 32.2036, val_loss: 34.8268, lr: 0.000317, 133.15s
+2024-03-24 18:38:12,966 - INFO - epoch complete!
+2024-03-24 18:38:12,967 - INFO - evaluating now!
+2024-03-24 18:38:24,426 - INFO - Epoch [202/300] (129311) train_loss: 32.1971, val_loss: 34.8117, lr: 0.000313, 133.28s
+2024-03-24 18:40:26,269 - INFO - epoch complete!
+2024-03-24 18:40:26,270 - INFO - evaluating now!
+2024-03-24 18:40:37,697 - INFO - Epoch [203/300] (129948) train_loss: 32.1721, val_loss: 34.6985, lr: 0.000309, 133.27s
+2024-03-24 18:42:39,560 - INFO - epoch complete!
+2024-03-24 18:42:39,561 - INFO - evaluating now!
+2024-03-24 18:42:50,934 - INFO - Epoch [204/300] (130585) train_loss: 32.1949, val_loss: 34.7907, lr: 0.000305, 133.24s
+2024-03-24 18:44:52,755 - INFO - epoch complete!
+2024-03-24 18:44:52,756 - INFO - evaluating now!
+2024-03-24 18:45:04,197 - INFO - Epoch [205/300] (131222) train_loss: 32.1775, val_loss: 34.6776, lr: 0.000301, 133.26s
+2024-03-24 18:47:06,074 - INFO - epoch complete!
+2024-03-24 18:47:06,075 - INFO - evaluating now!
+2024-03-24 18:47:17,514 - INFO - Epoch [206/300] (131859) train_loss: 32.1219, val_loss: 34.9679, lr: 0.000297, 133.32s
+2024-03-24 18:49:19,406 - INFO - epoch complete!
+2024-03-24 18:49:19,407 - INFO - evaluating now!
+2024-03-24 18:49:30,775 - INFO - Epoch [207/300] (132496) train_loss: 32.1018, val_loss: 34.6346, lr: 0.000293, 133.26s
+2024-03-24 18:51:32,496 - INFO - epoch complete!
+2024-03-24 18:51:32,497 - INFO - evaluating now!
+2024-03-24 18:51:43,895 - INFO - Epoch [208/300] (133133) train_loss: 32.0479, val_loss: 34.5439, lr: 0.000289, 133.12s
+2024-03-24 18:53:45,611 - INFO - epoch complete!
+2024-03-24 18:53:45,612 - INFO - evaluating now!
+2024-03-24 18:53:56,963 - INFO - Epoch [209/300] (133770) train_loss: 32.0521, val_loss: 34.5549, lr: 0.000285, 133.07s
+2024-03-24 18:55:58,836 - INFO - epoch complete!
+2024-03-24 18:55:58,836 - INFO - evaluating now!
+2024-03-24 18:56:10,156 - INFO - Epoch [210/300] (134407) train_loss: 32.0509, val_loss: 34.6864, lr: 0.000282, 133.19s
+2024-03-24 18:58:12,069 - INFO - epoch complete!
+2024-03-24 18:58:12,070 - INFO - evaluating now!
+2024-03-24 18:58:23,576 - INFO - Epoch [211/300] (135044) train_loss: 32.0073, val_loss: 34.8298, lr: 0.000278, 133.42s
+2024-03-24 19:00:25,313 - INFO - epoch complete!
+2024-03-24 19:00:25,314 - INFO - evaluating now!
+2024-03-24 19:00:36,719 - INFO - Epoch [212/300] (135681) train_loss: 31.9839, val_loss: 34.8160, lr: 0.000274, 133.14s
+2024-03-24 19:02:38,646 - INFO - epoch complete!
+2024-03-24 19:02:38,647 - INFO - evaluating now!
+2024-03-24 19:02:50,047 - INFO - Epoch [213/300] (136318) train_loss: 31.9793, val_loss: 34.6647, lr: 0.000270, 133.33s
+2024-03-24 19:04:51,918 - INFO - epoch complete!
+2024-03-24 19:04:51,919 - INFO - evaluating now!
+2024-03-24 19:05:03,362 - INFO - Epoch [214/300] (136955) train_loss: 31.9586, val_loss: 34.5401, lr: 0.000267, 133.31s
+2024-03-24 19:07:05,165 - INFO - epoch complete!
+2024-03-24 19:07:05,166 - INFO - evaluating now!
+2024-03-24 19:07:16,609 - INFO - Epoch [215/300] (137592) train_loss: 31.9413, val_loss: 34.4829, lr: 0.000263, 133.25s
+2024-03-24 19:07:16,686 - INFO - Saved model at 215
+2024-03-24 19:07:16,686 - INFO - Val loss decrease from 34.5145 to 34.4829, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch215.tar
+2024-03-24 19:09:18,459 - INFO - epoch complete!
+2024-03-24 19:09:18,460 - INFO - evaluating now!
+2024-03-24 19:09:29,853 - INFO - Epoch [216/300] (138229) train_loss: 31.9525, val_loss: 34.4837, lr: 0.000260, 133.17s
+2024-03-24 19:11:31,730 - INFO - epoch complete!
+2024-03-24 19:11:31,731 - INFO - evaluating now!
+2024-03-24 19:11:43,224 - INFO - Epoch [217/300] (138866) train_loss: 31.8927, val_loss: 34.6161, lr: 0.000256, 133.37s
+2024-03-24 19:13:46,560 - INFO - epoch complete!
+2024-03-24 19:13:46,561 - INFO - evaluating now!
+2024-03-24 19:13:58,043 - INFO - Epoch [218/300] (139503) train_loss: 31.8571, val_loss: 34.6012, lr: 0.000252, 134.82s
+2024-03-24 19:16:01,508 - INFO - epoch complete!
+2024-03-24 19:16:01,509 - INFO - evaluating now!
+2024-03-24 19:16:13,026 - INFO - Epoch [219/300] (140140) train_loss: 31.8845, val_loss: 34.5898, lr: 0.000249, 134.98s
+2024-03-24 19:18:16,505 - INFO - epoch complete!
+2024-03-24 19:18:16,505 - INFO - evaluating now!
+2024-03-24 19:18:28,171 - INFO - Epoch [220/300] (140777) train_loss: 31.8297, val_loss: 34.5562, lr: 0.000245, 135.14s
+2024-03-24 19:20:31,664 - INFO - epoch complete!
+2024-03-24 19:20:31,665 - INFO - evaluating now!
+2024-03-24 19:20:43,196 - INFO - Epoch [221/300] (141414) train_loss: 31.8116, val_loss: 34.6215, lr: 0.000242, 135.02s
+2024-03-24 19:22:46,581 - INFO - epoch complete!
+2024-03-24 19:22:46,582 - INFO - evaluating now!
+2024-03-24 19:22:58,064 - INFO - Epoch [222/300] (142051) train_loss: 31.8130, val_loss: 34.5920, lr: 0.000239, 134.87s
+2024-03-24 19:25:01,507 - INFO - epoch complete!
+2024-03-24 19:25:01,508 - INFO - evaluating now!
+2024-03-24 19:25:13,395 - INFO - Epoch [223/300] (142688) train_loss: 31.8012, val_loss: 34.5417, lr: 0.000235, 135.33s
+2024-03-24 19:27:16,827 - INFO - epoch complete!
+2024-03-24 19:27:16,828 - INFO - evaluating now!
+2024-03-24 19:27:28,518 - INFO - Epoch [224/300] (143325) train_loss: 31.7547, val_loss: 34.6145, lr: 0.000232, 135.12s
+2024-03-24 19:29:32,263 - INFO - epoch complete!
+2024-03-24 19:29:32,264 - INFO - evaluating now!
+2024-03-24 19:29:43,761 - INFO - Epoch [225/300] (143962) train_loss: 31.7233, val_loss: 34.6760, lr: 0.000228, 135.24s
+2024-03-24 19:31:45,682 - INFO - epoch complete!
+2024-03-24 19:31:45,683 - INFO - evaluating now!
+2024-03-24 19:31:57,152 - INFO - Epoch [226/300] (144599) train_loss: 31.7372, val_loss: 34.6703, lr: 0.000225, 133.39s
+2024-03-24 19:34:00,547 - INFO - epoch complete!
+2024-03-24 19:34:00,547 - INFO - evaluating now!
+2024-03-24 19:34:12,269 - INFO - Epoch [227/300] (145236) train_loss: 31.7099, val_loss: 34.8114, lr: 0.000222, 135.12s
+2024-03-24 19:36:15,915 - INFO - epoch complete!
+2024-03-24 19:36:15,915 - INFO - evaluating now!
+2024-03-24 19:36:27,596 - INFO - Epoch [228/300] (145873) train_loss: 31.6977, val_loss: 34.4795, lr: 0.000219, 135.33s
+2024-03-24 19:36:27,678 - INFO - Saved model at 228
+2024-03-24 19:36:27,679 - INFO - Val loss decrease from 34.4829 to 34.4795, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch228.tar
+2024-03-24 19:38:31,087 - INFO - epoch complete!
+2024-03-24 19:38:31,088 - INFO - evaluating now!
+2024-03-24 19:38:42,568 - INFO - Epoch [229/300] (146510) train_loss: 31.6742, val_loss: 34.5271, lr: 0.000216, 134.89s
+2024-03-24 19:40:45,636 - INFO - epoch complete!
+2024-03-24 19:40:45,637 - INFO - evaluating now!
+2024-03-24 19:40:57,176 - INFO - Epoch [230/300] (147147) train_loss: 31.6652, val_loss: 34.5193, lr: 0.000212, 134.61s
+2024-03-24 19:43:00,526 - INFO - epoch complete!
+2024-03-24 19:43:00,527 - INFO - evaluating now!
+2024-03-24 19:43:12,066 - INFO - Epoch [231/300] (147784) train_loss: 31.6582, val_loss: 34.5462, lr: 0.000209, 134.89s
+2024-03-24 19:45:15,451 - INFO - epoch complete!
+2024-03-24 19:45:15,452 - INFO - evaluating now!
+2024-03-24 19:45:27,037 - INFO - Epoch [232/300] (148421) train_loss: 31.6248, val_loss: 34.3972, lr: 0.000206, 134.97s
+2024-03-24 19:45:27,118 - INFO - Saved model at 232
+2024-03-24 19:45:27,119 - INFO - Val loss decrease from 34.4795 to 34.3972, saving to ./libcity/cache/59638/model_cache/PDFormer_PeMS04_epoch232.tar
+2024-03-24 19:47:30,343 - INFO - epoch complete!
+2024-03-24 19:47:30,344 - INFO - evaluating now!
+2024-03-24 19:47:41,874 - INFO - Epoch [233/300] (149058) train_loss: 31.6048, val_loss: 34.4432, lr: 0.000203, 134.76s
+2024-03-24 19:49:45,392 - INFO - epoch complete!
+2024-03-24 19:49:45,393 - INFO - evaluating now!
+2024-03-24 19:49:56,882 - INFO - Epoch [234/300] (149695) train_loss: 31.5606, val_loss: 34.5220, lr: 0.000200, 135.01s
+2024-03-24 19:52:00,419 - INFO - epoch complete!
+2024-03-24 19:52:00,420 - INFO - evaluating now!
+2024-03-24 19:52:12,017 - INFO - Epoch [235/300] (150332) train_loss: 31.5551, val_loss: 34.5034, lr: 0.000197, 135.13s
+2024-03-24 19:54:15,132 - INFO - epoch complete!
+2024-03-24 19:54:15,133 - INFO - evaluating now!
+2024-03-24 19:54:26,595 - INFO - Epoch [236/300] (150969) train_loss: 31.5549, val_loss: 34.6487, lr: 0.000194, 134.58s
+2024-03-24 19:56:28,860 - INFO - epoch complete!
+2024-03-24 19:56:28,861 - INFO - evaluating now!
+2024-03-24 19:56:40,223 - INFO - Epoch [237/300] (151606) train_loss: 31.5246, val_loss: 34.7262, lr: 0.000192, 133.63s
+2024-03-24 19:58:42,034 - INFO - epoch complete!
+2024-03-24 19:58:42,035 - INFO - evaluating now!
+2024-03-24 19:58:53,315 - INFO - Epoch [238/300] (152243) train_loss: 31.5308, val_loss: 34.6267, lr: 0.000189, 133.09s
+2024-03-24 20:00:55,105 - INFO - epoch complete!
+2024-03-24 20:00:55,106 - INFO - evaluating now!
+2024-03-24 20:01:06,551 - INFO - Epoch [239/300] (152880) train_loss: 31.4823, val_loss: 34.5165, lr: 0.000186, 133.24s
+2024-03-24 20:03:08,269 - INFO - epoch complete!
+2024-03-24 20:03:08,269 - INFO - evaluating now!
+2024-03-24 20:03:19,562 - INFO - Epoch [240/300] (153517) train_loss: 31.4642, val_loss: 34.6343, lr: 0.000183, 133.01s
+2024-03-24 20:05:21,272 - INFO - epoch complete!
+2024-03-24 20:05:21,273 - INFO - evaluating now!
+2024-03-24 20:05:32,671 - INFO - Epoch [241/300] (154154) train_loss: 31.4544, val_loss: 34.4581, lr: 0.000180, 133.11s
+2024-03-24 20:07:34,391 - INFO - epoch complete!
+2024-03-24 20:07:34,392 - INFO - evaluating now!
+2024-03-24 20:07:45,756 - INFO - Epoch [242/300] (154791) train_loss: 31.4426, val_loss: 34.5553, lr: 0.000178, 133.08s
+2024-03-24 20:09:47,439 - INFO - epoch complete!
+2024-03-24 20:09:47,440 - INFO - evaluating now!
+2024-03-24 20:09:58,754 - INFO - Epoch [243/300] (155428) train_loss: 31.4201, val_loss: 34.4650, lr: 0.000175, 133.00s
+2024-03-24 20:12:00,556 - INFO - epoch complete!
+2024-03-24 20:12:00,557 - INFO - evaluating now!
+2024-03-24 20:12:11,926 - INFO - Epoch [244/300] (156065) train_loss: 31.3879, val_loss: 34.8344, lr: 0.000173, 133.17s
+2024-03-24 20:14:13,824 - INFO - epoch complete!
+2024-03-24 20:14:13,825 - INFO - evaluating now!
+2024-03-24 20:14:25,310 - INFO - Epoch [245/300] (156702) train_loss: 31.3794, val_loss: 34.4843, lr: 0.000170, 133.38s
+2024-03-24 20:16:27,324 - INFO - epoch complete!
+2024-03-24 20:16:27,325 - INFO - evaluating now!
+2024-03-24 20:16:38,677 - INFO - Epoch [246/300] (157339) train_loss: 31.3598, val_loss: 34.5038, lr: 0.000168, 133.37s
+2024-03-24 20:18:40,684 - INFO - epoch complete!
+2024-03-24 20:18:40,685 - INFO - evaluating now!
+2024-03-24 20:18:52,104 - INFO - Epoch [247/300] (157976) train_loss: 31.3702, val_loss: 34.6345, lr: 0.000165, 133.43s
+2024-03-24 20:20:54,239 - INFO - epoch complete!
+2024-03-24 20:20:54,240 - INFO - evaluating now!
+2024-03-24 20:21:05,642 - INFO - Epoch [248/300] (158613) train_loss: 31.3477, val_loss: 34.4955, lr: 0.000163, 133.54s
+2024-03-24 20:23:07,631 - INFO - epoch complete!
+2024-03-24 20:23:07,632 - INFO - evaluating now!
+2024-03-24 20:23:19,107 - INFO - Epoch [249/300] (159250) train_loss: 31.3267, val_loss: 34.5328, lr: 0.000160, 133.46s
+2024-03-24 20:25:21,368 - INFO - epoch complete!
+2024-03-24 20:25:21,369 - INFO - evaluating now!
+2024-03-24 20:25:32,863 - INFO - Epoch [250/300] (159887) train_loss: 31.3351, val_loss: 34.6077, lr: 0.000158, 133.75s
+2024-03-24 20:27:35,005 - INFO - epoch complete!
+2024-03-24 20:27:35,005 - INFO - evaluating now!
+2024-03-24 20:27:46,453 - INFO - Epoch [251/300] (160524) train_loss: 31.2866, val_loss: 34.5215, lr: 0.000156, 133.59s
+2024-03-24 20:29:48,468 - INFO - epoch complete!
+2024-03-24 20:29:48,469 - INFO - evaluating now!
+2024-03-24 20:29:59,836 - INFO - Epoch [252/300] (161161) train_loss: 31.2881, val_loss: 34.4657, lr: 0.000153, 133.38s
+2024-03-24 20:32:01,829 - INFO - epoch complete!
+2024-03-24 20:32:01,830 - INFO - evaluating now!
+2024-03-24 20:32:13,195 - INFO - Epoch [253/300] (161798) train_loss: 31.2882, val_loss: 34.7241, lr: 0.000151, 133.36s
+2024-03-24 20:34:15,188 - INFO - epoch complete!
+2024-03-24 20:34:15,189 - INFO - evaluating now!
+2024-03-24 20:34:26,616 - INFO - Epoch [254/300] (162435) train_loss: 31.2390, val_loss: 34.4469, lr: 0.000149, 133.42s
+2024-03-24 20:36:28,675 - INFO - epoch complete!
+2024-03-24 20:36:28,676 - INFO - evaluating now!
+2024-03-24 20:36:40,064 - INFO - Epoch [255/300] (163072) train_loss: 31.2389, val_loss: 34.7091, lr: 0.000147, 133.45s
+2024-03-24 20:38:42,165 - INFO - epoch complete!
+2024-03-24 20:38:42,166 - INFO - evaluating now!
+2024-03-24 20:38:53,557 - INFO - Epoch [256/300] (163709) train_loss: 31.2361, val_loss: 34.4846, lr: 0.000145, 133.49s
+2024-03-24 20:40:55,625 - INFO - epoch complete!
+2024-03-24 20:40:55,626 - INFO - evaluating now!
+2024-03-24 20:41:07,040 - INFO - Epoch [257/300] (164346) train_loss: 31.2046, val_loss: 34.5744, lr: 0.000143, 133.48s
+2024-03-24 20:43:09,160 - INFO - epoch complete!
+2024-03-24 20:43:09,161 - INFO - evaluating now!
+2024-03-24 20:43:20,609 - INFO - Epoch [258/300] (164983) train_loss: 31.2037, val_loss: 34.5016, lr: 0.000141, 133.57s
+2024-03-24 20:45:22,579 - INFO - epoch complete!
+2024-03-24 20:45:22,580 - INFO - evaluating now!
+2024-03-24 20:45:33,940 - INFO - Epoch [259/300] (165620) train_loss: 31.1866, val_loss: 34.5131, lr: 0.000139, 133.33s
+2024-03-24 20:47:35,634 - INFO - epoch complete!
+2024-03-24 20:47:35,635 - INFO - evaluating now!
+2024-03-24 20:47:47,033 - INFO - Epoch [260/300] (166257) train_loss: 31.1824, val_loss: 34.5378, lr: 0.000137, 133.09s
+2024-03-24 20:49:48,907 - INFO - epoch complete!
+2024-03-24 20:49:48,908 - INFO - evaluating now!
+2024-03-24 20:50:00,215 - INFO - Epoch [261/300] (166894) train_loss: 31.1628, val_loss: 34.7829, lr: 0.000135, 133.18s
+2024-03-24 20:52:01,996 - INFO - epoch complete!
+2024-03-24 20:52:01,997 - INFO - evaluating now!
+2024-03-24 20:52:13,374 - INFO - Epoch [262/300] (167531) train_loss: 31.1669, val_loss: 34.4993, lr: 0.000133, 133.16s
+2024-03-24 20:54:15,232 - INFO - epoch complete!
+2024-03-24 20:54:15,233 - INFO - evaluating now!
+2024-03-24 20:54:26,604 - INFO - Epoch [263/300] (168168) train_loss: 31.1642, val_loss: 34.4856, lr: 0.000132, 133.23s
+2024-03-24 20:56:28,368 - INFO - epoch complete!
+2024-03-24 20:56:28,369 - INFO - evaluating now!
+2024-03-24 20:56:39,714 - INFO - Epoch [264/300] (168805) train_loss: 31.1368, val_loss: 34.6103, lr: 0.000130, 133.11s
+2024-03-24 20:58:41,513 - INFO - epoch complete!
+2024-03-24 20:58:41,514 - INFO - evaluating now!
+2024-03-24 20:58:52,862 - INFO - Epoch [265/300] (169442) train_loss: 31.1330, val_loss: 34.6189, lr: 0.000128, 133.15s
+2024-03-24 21:00:54,541 - INFO - epoch complete!
+2024-03-24 21:00:54,542 - INFO - evaluating now!
+2024-03-24 21:01:05,910 - INFO - Epoch [266/300] (170079) train_loss: 31.0950, val_loss: 34.5136, lr: 0.000127, 133.05s
+2024-03-24 21:03:07,654 - INFO - epoch complete!
+2024-03-24 21:03:07,654 - INFO - evaluating now!
+2024-03-24 21:03:19,161 - INFO - Epoch [267/300] (170716) train_loss: 31.1042, val_loss: 34.4835, lr: 0.000125, 133.25s
+2024-03-24 21:05:20,920 - INFO - epoch complete!
+2024-03-24 21:05:20,921 - INFO - evaluating now!
+2024-03-24 21:05:32,334 - INFO - Epoch [268/300] (171353) train_loss: 31.0686, val_loss: 34.5190, lr: 0.000124, 133.17s
+2024-03-24 21:07:34,129 - INFO - epoch complete!
+2024-03-24 21:07:34,130 - INFO - evaluating now!
+2024-03-24 21:07:45,508 - INFO - Epoch [269/300] (171990) train_loss: 31.0622, val_loss: 34.7403, lr: 0.000122, 133.17s
+2024-03-24 21:09:47,250 - INFO - epoch complete!
+2024-03-24 21:09:47,251 - INFO - evaluating now!
+2024-03-24 21:09:58,606 - INFO - Epoch [270/300] (172627) train_loss: 31.0763, val_loss: 34.4959, lr: 0.000121, 133.10s
+2024-03-24 21:12:00,392 - INFO - epoch complete!
+2024-03-24 21:12:00,393 - INFO - evaluating now!
+2024-03-24 21:12:11,748 - INFO - Epoch [271/300] (173264) train_loss: 31.0349, val_loss: 34.5223, lr: 0.000119, 133.14s
+2024-03-24 21:14:13,555 - INFO - epoch complete!
+2024-03-24 21:14:13,555 - INFO - evaluating now!
+2024-03-24 21:14:25,042 - INFO - Epoch [272/300] (173901) train_loss: 31.0307, val_loss: 34.6025, lr: 0.000118, 133.29s
+2024-03-24 21:16:26,962 - INFO - epoch complete!
+2024-03-24 21:16:26,963 - INFO - evaluating now!
+2024-03-24 21:16:38,385 - INFO - Epoch [273/300] (174538) train_loss: 31.0388, val_loss: 34.5145, lr: 0.000117, 133.34s
+2024-03-24 21:18:40,121 - INFO - epoch complete!
+2024-03-24 21:18:40,121 - INFO - evaluating now!
+2024-03-24 21:18:51,426 - INFO - Epoch [274/300] (175175) train_loss: 31.0035, val_loss: 34.5200, lr: 0.000115, 133.04s
+2024-03-24 21:20:53,188 - INFO - epoch complete!
+2024-03-24 21:20:53,188 - INFO - evaluating now!
+2024-03-24 21:21:04,556 - INFO - Epoch [275/300] (175812) train_loss: 31.0165, val_loss: 34.6267, lr: 0.000114, 133.13s
+2024-03-24 21:23:06,385 - INFO - epoch complete!
+2024-03-24 21:23:06,386 - INFO - evaluating now!
+2024-03-24 21:23:17,817 - INFO - Epoch [276/300] (176449) train_loss: 31.0141, val_loss: 34.5478, lr: 0.000113, 133.26s
+2024-03-24 21:25:19,601 - INFO - epoch complete!
+2024-03-24 21:25:19,602 - INFO - evaluating now!
+2024-03-24 21:25:31,006 - INFO - Epoch [277/300] (177086) train_loss: 30.9849, val_loss: 34.4714, lr: 0.000112, 133.19s
+2024-03-24 21:27:32,969 - INFO - epoch complete!
+2024-03-24 21:27:32,970 - INFO - evaluating now!
+2024-03-24 21:27:44,351 - INFO - Epoch [278/300] (177723) train_loss: 30.9772, val_loss: 34.6956, lr: 0.000111, 133.34s
+2024-03-24 21:29:46,110 - INFO - epoch complete!
+2024-03-24 21:29:46,111 - INFO - evaluating now!
+2024-03-24 21:29:57,419 - INFO - Epoch [279/300] (178360) train_loss: 30.9829, val_loss: 34.5047, lr: 0.000110, 133.07s
+2024-03-24 21:31:59,273 - INFO - epoch complete!
+2024-03-24 21:31:59,274 - INFO - evaluating now!
+2024-03-24 21:32:10,613 - INFO - Epoch [280/300] (178997) train_loss: 30.9539, val_loss: 34.5680, lr: 0.000109, 133.19s
+2024-03-24 21:34:12,360 - INFO - epoch complete!
+2024-03-24 21:34:12,360 - INFO - evaluating now!
+2024-03-24 21:34:23,801 - INFO - Epoch [281/300] (179634) train_loss: 30.9311, val_loss: 34.5896, lr: 0.000108, 133.19s
+2024-03-24 21:36:25,616 - INFO - epoch complete!
+2024-03-24 21:36:25,617 - INFO - evaluating now!
+2024-03-24 21:36:37,014 - INFO - Epoch [282/300] (180271) train_loss: 30.9267, val_loss: 34.5527, lr: 0.000107, 133.21s
+2024-03-24 21:36:37,014 - WARNING - Early stopping at epoch: 282
+2024-03-24 21:36:37,015 - INFO - Trained totally 283 epochs, average train time is 121.537s, average eval time is 11.304s
+2024-03-24 21:36:37,084 - INFO - Loaded model at 232
+2024-03-24 21:36:37,086 - INFO - Saved model at ./libcity/cache/59638/model_cache/PDFormer_PeMS04.m
+2024-03-24 21:36:37,161 - INFO - Start evaluating ...
+2024-03-24 21:37:19,358 - INFO - Note that you select the average mode to evaluate!
+2024-03-24 21:37:19,365 - INFO - Evaluate result is saved at ./libcity/cache/59638/evaluate_cache/2024_03_24_21_37_19_PDFormer_PeMS04_average.csv
+2024-03-24 21:37:19,382 - INFO - 
+          MAE  MAPE       RMSE  masked_MAE  masked_MAPE  masked_RMSE
+1   16.457457   inf  27.152132   16.578537     0.109732    27.056578
+2   16.676472   inf  27.591682   16.793303     0.111329    27.478279
+3   16.873907   inf  27.964958   16.987782     0.112616    27.837185
+4   17.046841   inf  28.298578   17.158594     0.113586    28.158644
+5   17.202156   inf  28.588482   17.311476     0.114559    28.437544
+6   17.341768   inf  28.850107   17.449142     0.115370    28.688656
+7   17.472168   inf  29.087437   17.577681     0.116221    28.916367
+8   17.593618   inf  29.308136   17.697172     0.117042    29.127523
+9   17.710478   inf  29.515291   17.811998     0.117876    29.325588
+10  17.822641   inf  29.710665   17.922237     0.118710    29.512043
+11  17.935947   inf  29.901409   18.033661     0.119594    29.694458
+12  18.060904   inf  30.101601   18.156919     0.120527    29.887169
