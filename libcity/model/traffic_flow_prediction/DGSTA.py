@@ -23,7 +23,6 @@ def drop_path(x, drop_prob=0., training=False):
     return output
 
 
-# 数据嵌入
 class TokenEmbedding(nn.Module):
     def __init__(self, input_dim, embed_dim, norm_layer=None):
         super().__init__()
@@ -36,38 +35,35 @@ class TokenEmbedding(nn.Module):
         return x
 
 
-# 位置编码
 class PositionalEncoding(nn.Module):
     def __init__(self, embed_dim, max_len=100):
         super(PositionalEncoding, self).__init__()
-        pe = torch.zeros(max_len, embed_dim).float()  # (100,64)
+        pe = torch.zeros(max_len, embed_dim).float()
         pe.require_grad = False
 
-        position = torch.arange(0, max_len).float().unsqueeze(1)  # (100,1)
-        div_term = (torch.arange(0, embed_dim, 2).float() * -(math.log(10000.0) / embed_dim)).exp()  # (1,32)
+        position = torch.arange(0, max_len).float().unsqueeze(1)
+        div_term = (torch.arange(0, embed_dim, 2).float() * -(math.log(10000.0) / embed_dim)).exp()
 
         pe[:, 0::2] = torch.sin(position * div_term)
         pe[:, 1::2] = torch.cos(position * div_term)
 
-        pe = pe.unsqueeze(0)  # (1,100,64)
+        pe = pe.unsqueeze(0)
         self.register_buffer('pe', pe)
 
     def forward(self, x):
         return self.pe[:, :x.size(1)].unsqueeze(2).expand_as(x).detach()
 
 
-# 拉普拉斯嵌入
 class LaplacianPE(nn.Module):
     def __init__(self, lape_dim, embed_dim):
         super().__init__()
-        self.embedding_lap_pos_enc = nn.Linear(lape_dim, embed_dim)  # 8->64
+        self.embedding_lap_pos_enc = nn.Linear(lape_dim, embed_dim)
 
     def forward(self, lap_mx):
         lap_pos_enc = self.embedding_lap_pos_enc(lap_mx).unsqueeze(0).unsqueeze(0)
         return lap_pos_enc
 
 
-# 输入嵌入 特征维、拉普拉斯、位置、空间
 class DataEmbedding(nn.Module):
     def __init__(
             self, feature_dim, embed_dim, lape_dim, adj_mx, drop=0.,
@@ -81,35 +77,32 @@ class DataEmbedding(nn.Module):
         self.device = device
         self.embed_dim = embed_dim
         self.feature_dim = feature_dim
-        self.value_embedding = TokenEmbedding(feature_dim, embed_dim)  # 特征维 1->64
-        self.position_encoding = PositionalEncoding(embed_dim)  # (1,100,64)
+        self.value_embedding = TokenEmbedding(feature_dim, embed_dim)
+        self.position_encoding = PositionalEncoding(embed_dim)
         if self.add_time_in_day:
             self.minute_size = 1440
             self.daytime_embedding = nn.Embedding(self.minute_size, embed_dim)
-            # 天嵌入 1440->64
         if self.add_day_in_week:
             weekday_size = 7
             self.weekday_embedding = nn.Embedding(weekday_size, embed_dim)
-            # 周嵌入 7->64
-        self.spatial_embedding = LaplacianPE(lape_dim, embed_dim)  # 拉普拉斯嵌入
-        self.tempp_embedding = nn.Linear(lape_dim, embed_dim)  # 时间序列嵌入
+        self.spatial_embedding = LaplacianPE(lape_dim, embed_dim)
+        self.tempp_embedding = nn.Linear(lape_dim, embed_dim)
         self.dropout = nn.Dropout(drop)
 
     def forward(self, x, lap_mx, tempp):
         origin_x = x
-        x = self.value_embedding(origin_x[:, :, :, :self.feature_dim])  # self.feature_dim = 1
+        x = self.value_embedding(origin_x[:, :, :, :self.feature_dim])
         x += self.position_encoding(x)
         if self.add_time_in_day:
             x += self.daytime_embedding((origin_x[:, :, :, self.feature_dim] * self.minute_size).round().long())
         if self.add_day_in_week:
             x += self.weekday_embedding(origin_x[:, :, :, self.feature_dim + 1: self.feature_dim + 8].argmax(dim=3))
-        x += self.spatial_embedding(lap_mx)  # mask掉拉普拉斯嵌入
+        x += self.spatial_embedding(lap_mx)
         x += self.tempp_embedding(tempp).unsqueeze(0).unsqueeze(0)
         x = self.dropout(x)
         return x
 
 
-# 随机丢弃
 class DropPath(nn.Module):
     def __init__(self, drop_prob=None):
         super(DropPath, self).__init__()
@@ -170,7 +163,6 @@ class gcn(nn.Module):
         h = F.dropout(h, self.dropout, training=self.training)
         return h
 
-# 时空自注意力
 class STSelfAttention(nn.Module):
     def __init__(
             self, dim, s_attn_size, t_attn_size, geo_num_heads=4, sem_num_heads=2, t_num_heads=2, qkv_bias=False,
@@ -189,37 +181,20 @@ class STSelfAttention(nn.Module):
         self.geo_ratio = geo_num_heads / (geo_num_heads + sem_num_heads + t_num_heads)  # 0.5
         self.sem_ratio = sem_num_heads / (geo_num_heads + sem_num_heads + t_num_heads)  # 0.25
         self.t_ratio = 1 - self.geo_ratio - self.sem_ratio  # 0.25
-        # dim 64
         self.output_dim = output_dim
-
-        # self.pattern_q_linears = nn.ModuleList([
-        #     nn.Linear(dim, int(dim * self.geo_ratio)) for _ in range(output_dim)
-        # ])
-        # self.pattern_k_linears = nn.ModuleList([
-        #     nn.Linear(dim, int(dim * self.geo_ratio)) for _ in range(output_dim)
-        # ])
-        # self.pattern_v_linears = nn.ModuleList([
-        #     nn.Linear(dim, int(dim * self.geo_ratio)) for _ in range(output_dim)
-        # ])
 
         self.geo_q_conv = nn.Conv2d(dim, int(dim * self.geo_ratio), kernel_size=1, bias=qkv_bias)
         self.geo_k_conv = nn.Conv2d(dim, int(dim * self.geo_ratio), kernel_size=1, bias=qkv_bias)
         self.geo_v_conv = nn.Conv2d(dim, int(dim * self.geo_ratio), kernel_size=1, bias=qkv_bias)
         self.geo_attn_drop = nn.Dropout(attn_drop)
 
-        # self.sem_q_conv = nn.Conv2d(dim, int(dim * self.sem_ratio), kernel_size=1, bias=qkv_bias)
-        # self.sem_k_conv = nn.Conv2d(dim, int(dim * self.sem_ratio), kernel_size=1, bias=qkv_bias)
-        # self.sem_v_conv = nn.Conv2d(dim, int(dim * self.sem_ratio), kernel_size=1, bias=qkv_bias)
-        # self.sem_attn_drop = nn.Dropout(attn_drop)
 
         self.t_q_conv = nn.Conv2d(dim, int(dim * self.t_ratio), kernel_size=1, bias=qkv_bias)
         self.t_k_conv = nn.Conv2d(dim, int(dim * self.t_ratio), kernel_size=1, bias=qkv_bias)
         self.t_v_conv = nn.Conv2d(dim, int(dim * self.t_ratio), kernel_size=1, bias=qkv_bias)
         self.t_attn_drop = nn.Dropout(attn_drop)
 
-        # self.expand = nn.Linear(int(dim / 2), dim)
         self.proj = nn.Linear(int(dim * 3 / 4), dim)
-        # self.proj = nn.Linear(dim, dim)
         self.proj_drop = nn.Dropout(proj_drop)
 
         # 多图
@@ -227,23 +202,19 @@ class STSelfAttention(nn.Module):
         self.days = 288
         dims = 40
         self.supports_len = 1
-        torch.cuda.manual_seed_all(1)  # 为所有的GPU设置种子
+        torch.cuda.manual_seed_all(1)
         self.nodevec_p1 = nn.Parameter(torch.randn(self.days, dims).to(device), requires_grad=True).to(device)
         self.nodevec_p2 = nn.Parameter(torch.randn(num_nodes, dims).to(device), requires_grad=True).to(device)
         self.nodevec_p3 = nn.Parameter(torch.randn(num_nodes, dims).to(device), requires_grad=True).to(device)
         self.nodevec_pk = nn.Parameter(torch.randn(dims, dims, dims).to(device), requires_grad=True).to(device)
         
 
-        # for i in range(4):
-        #     self.gconv.append(
-        #         gcn(32, 32, 0.3, support_len=self.supports_len, order=2))
         self.gconv = gcn(32, 32, 0.3, support_len=self.supports_len, order=2)
 
         self.reshape1 = nn.Linear(dim, 32)
         self.reshape2 = nn.Linear(32, dim)
 
     def dgconstruct(self, time_embedding, source_embedding, target_embedding, core_embedding):
-        # print("time type:", type(time_embedding))
         adp = torch.einsum('ai, ijk->ajk', time_embedding, core_embedding)
         adp = torch.einsum('bj, ajk->abk', source_embedding, adp)
         adp = torch.einsum('ck, abk->abc', target_embedding, adp)
@@ -252,30 +223,24 @@ class STSelfAttention(nn.Module):
         return adp
         
 
-    def forward(self, x, ind, x_patterns, pattern_keys, geo_mask=None, sem_mask=None):
-        B, T, N, D = x.shape  # 16,12,170,64
+    def forward(self, x, ind, geo_mask=None):
+        B, T, N, D = x.shape
 
-        # 动态图
         ind %= self.days
         ind = ind.cpu().numpy()
         adp = self.dgconstruct(self.nodevec_p1[ind], self.nodevec_p2, self.nodevec_p3, self.nodevec_pk)
-        # adp 64,170,170
         new_supports = [adp]
 
-        # 动态图卷积
         x = x.reshape(-1, D)
         x = self.reshape1(x)
         x = x.reshape(B, T, N, 32)
-        x = x.permute(0, 3, 2, 1)  # 16,32,170,12
-        # for i in range(4):
-        #     x = self.gconv[i](x, new_supports)
+        x = x.permute(0, 3, 2, 1)
         x = self.gconv(x, new_supports)
-        x = x.permute(0, 3, 2, 1)  # 16,12,170,32
+        x = x.permute(0, 3, 2, 1)
         x = x.reshape(-1, 32)
         x = self.reshape2(x)
         x = x.reshape(B, T, N, D)
 
-        # 时间注意力
         t_q = self.t_q_conv(x.permute(0, 3, 1, 2)).permute(0, 3, 2, 1)
         t_k = self.t_k_conv(x.permute(0, 3, 1, 2)).permute(0, 3, 2, 1)
         t_v = self.t_v_conv(x.permute(0, 3, 1, 2)).permute(0, 3, 2, 1)
@@ -287,18 +252,8 @@ class STSelfAttention(nn.Module):
         t_attn = self.t_attn_drop(t_attn)
         t_x = (t_attn @ t_v).transpose(2, 3).reshape(B, N, T, int(D * self.t_ratio)).transpose(1, 2)
 
-        
-
-        # 近距离空间注意力
         geo_q = self.geo_q_conv(x.permute(0, 3, 1, 2)).permute(0, 2, 3, 1)
         geo_k = self.geo_k_conv(x.permute(0, 3, 1, 2)).permute(0, 2, 3, 1)
-        # for i in range(self.output_dim):
-        #     pattern_q = self.pattern_q_linears[i](x_patterns[..., i])  # x_patterns(16,12,170,64,1)
-        #     pattern_k = self.pattern_k_linears[i](pattern_keys[..., i])  # pattern_keys(16,64,1)
-        #     pattern_v = self.pattern_v_linears[i](pattern_keys[..., i])
-        #     pattern_attn = (pattern_q @ pattern_k.transpose(-2, -1)) * self.scale
-        #     pattern_attn = pattern_attn.softmax(dim=-1)
-        #     geo_k += pattern_attn @ pattern_v
         geo_v = self.geo_v_conv(x.permute(0, 3, 1, 2)).permute(0, 2, 3, 1)
         geo_q = geo_q.reshape(B, T, N, self.geo_num_heads, self.head_dim).permute(0, 1, 3, 2, 4)
         geo_k = geo_k.reshape(B, T, N, self.geo_num_heads, self.head_dim).permute(0, 1, 3, 2, 4)
@@ -310,24 +265,8 @@ class STSelfAttention(nn.Module):
         geo_attn = self.geo_attn_drop(geo_attn)
         geo_x = (geo_attn @ geo_v).transpose(2, 3).reshape(B, T, N, int(D * self.geo_ratio))
 
-        # 远距离空间注意力
-        # sem_q = self.sem_q_conv(x.permute(0, 3, 1, 2)).permute(0, 2, 3, 1)
-        # sem_k = self.sem_k_conv(x.permute(0, 3, 1, 2)).permute(0, 2, 3, 1)
-        # sem_v = self.sem_v_conv(x.permute(0, 3, 1, 2)).permute(0, 2, 3, 1)
-        # sem_q = sem_q.reshape(B, T, N, self.sem_num_heads, self.head_dim).permute(0, 1, 3, 2, 4)
-        # sem_k = sem_k.reshape(B, T, N, self.sem_num_heads, self.head_dim).permute(0, 1, 3, 2, 4)
-        # sem_v = sem_v.reshape(B, T, N, self.sem_num_heads, self.head_dim).permute(0, 1, 3, 2, 4)
-        # sem_attn = (sem_q @ sem_k.transpose(-2, -1)) * self.scale
-        # if sem_mask is not None:
-        #     sem_attn.masked_fill_(sem_mask, float('-inf'))
-        # sem_attn = sem_attn.softmax(dim=-1)
-        # sem_attn = self.sem_attn_drop(sem_attn)
-        # sem_x = (sem_attn @ sem_v).transpose(2, 3).reshape(B, T, N, int(D * self.sem_ratio))
 
-        # 合并
-        # x = self.expand(geo_x)
         x = self.proj(torch.cat([t_x, geo_x], dim=-1))
-        # x = self.proj(t_x)
         x = self.proj_drop(x)
         return x
 
@@ -351,50 +290,6 @@ class Mlp(nn.Module):
         return x
 
 
-# 时间自注意力
-class TemporalSelfAttention(nn.Module):
-    def __init__(
-            self, dim, dim_out, t_attn_size, t_num_heads=6, qkv_bias=False,
-            attn_drop=0., proj_drop=0., device=torch.device('cpu'),
-    ):
-        super().__init__()
-        assert dim % t_num_heads == 0
-        self.t_num_heads = t_num_heads
-        self.head_dim = dim // t_num_heads
-        self.scale = self.head_dim ** -0.5
-        self.device = device
-        self.t_attn_size = t_attn_size
-
-        self.t_q_conv = nn.Conv2d(dim, dim, kernel_size=1, bias=qkv_bias)
-        self.t_k_conv = nn.Conv2d(dim, dim, kernel_size=1, bias=qkv_bias)
-        self.t_v_conv = nn.Conv2d(dim, dim, kernel_size=1, bias=qkv_bias)
-        self.t_attn_drop = nn.Dropout(attn_drop)
-
-        self.proj = nn.Linear(dim, dim_out)
-        self.proj_drop = nn.Dropout(proj_drop)
-
-    def forward(self, x):
-        B, T, N, D = x.shape
-        t_q = self.t_q_conv(x.permute(0, 3, 1, 2)).permute(0, 3, 2, 1)
-        t_k = self.t_k_conv(x.permute(0, 3, 1, 2)).permute(0, 3, 2, 1)
-        t_v = self.t_v_conv(x.permute(0, 3, 1, 2)).permute(0, 3, 2, 1)
-        t_q = t_q.reshape(B, N, T, self.t_num_heads, self.head_dim).permute(0, 1, 3, 2, 4)
-        t_k = t_k.reshape(B, N, T, self.t_num_heads, self.head_dim).permute(0, 1, 3, 2, 4)
-        t_v = t_v.reshape(B, N, T, self.t_num_heads, self.head_dim).permute(0, 1, 3, 2, 4)
-
-        t_attn = (t_q @ t_k.transpose(-2, -1)) * self.scale
-
-        t_attn = t_attn.softmax(dim=-1)
-        t_attn = self.t_attn_drop(t_attn)
-
-        t_x = (t_attn @ t_v).transpose(2, 3).reshape(B, N, T, D).transpose(1, 2)
-
-        x = self.proj(t_x)
-        x = self.proj_drop(x)
-        return x
-
-
-# 时空块
 class STEncoderBlock(nn.Module):
 
     def __init__(
@@ -416,14 +311,14 @@ class STEncoderBlock(nn.Module):
         mlp_hidden_dim = int(dim * mlp_ratio)
         self.mlp = Mlp(in_features=dim, hidden_features=mlp_hidden_dim, act_layer=act_layer, drop=drop)
 
-    def forward(self, x, ind, x_patterns, pattern_keys, geo_mask=None, sem_mask=None):
+    def forward(self, x, ind, geo_mask=None):
         if self.type_ln == 'pre':  # ture
             x = x + self.drop_path(
-                self.st_attn(self.norm1(x), ind, x_patterns, pattern_keys, geo_mask=geo_mask, sem_mask=sem_mask))
+                self.st_attn(self.norm1(x), ind, geo_mask=geo_mask))
             x = x + self.drop_path(self.mlp(self.norm2(x)))
         elif self.type_ln == 'post':
             x = self.norm1(
-                x + self.drop_path(self.st_attn(x, x_patterns, pattern_keys, geo_mask=geo_mask, sem_mask=sem_mask)))
+                x + self.drop_path(self.st_attn(x, geo_mask=geo_mask)))
             x = self.norm2(x + self.drop_path(self.mlp(x)))
         return x
 
@@ -431,21 +326,12 @@ class STEncoderBlock(nn.Module):
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
-# 针对tempp矩阵，取最大值
 def norm_embedding(adj):
     torch.fill_(adj.diagonal(), 0)
     values, indices = torch.topk(adj, 5, dim=1)
     b = torch.zeros_like(adj)
     b.scatter_(1, indices, 1.0)
     return b
-
-# 针对dtw矩阵，取最小值
-# def norm_embedding(adj):
-#     torch.fill_(adj.diagonal(), float('inf'))
-#     values, indices = adj.topk(5, dim=1, largest=False)
-#     b = torch.zeros_like(adj)
-#     b.scatter_(1, indices, 1.0)
-#     return b
 
 class DGSTA(AbstractTrafficStateModel):
     def __init__(self, config, data_feature):
@@ -489,25 +375,14 @@ class DGSTA(AbstractTrafficStateModel):
         self.world_size = config.get('world_size', 1)
         self.huber_delta = config.get('huber_delta', 1)
         self.quan_delta = config.get('quan_delta', 0.25)
-        self.far_mask_delta = config.get('far_mask_delta', 5)  # geo矩阵参数 7
-        self.dtw_delta = config.get('dtw_delta', 5)  # dtw参数 5
+        self.far_mask_delta = config.get('far_mask_delta', 5)
+        self.dtw_delta = config.get('dtw_delta', 5)
 
         self.use_curriculum_learning = config.get('use_curriculum_learning', True)
-        self.step_size = config.get('step_size', 2500)  # 2776
+        self.step_size = config.get('step_size', 2500)
         self.max_epoch = config.get('max_epoch', 200)
         self.task_level = config.get('task_level', 0)
-        self.lape_dim = config.get('lape_dim', 200)  # 8
-        # for i in range(self.adj_mx.shape[0]):
-        #     for j in range(self.adj_mx.shape[1]):
-        #         if self.adj_mx[i][j] == 0:
-        #             self.adj_mx[i][j] = 1
-        #         else:
-        #             self.adj_mx[i][j] = 0
-        # self.adj_mx = torch.from_numpy(self.adj_mx).to(self.device)
-
-        # 这两行没看懂是干什么的，好像没用到
-        # self.data_path = './raw_data/' + self.dataset + '/'
-        # self.adp_file = config.get('adp_file', self.dataset)
+        self.lape_dim = config.get('lape_dim', 200)
 
         if self.max_epoch * self.num_batches * self.world_size < self.step_size * self.output_window:
             self._logger.warning('Parameter `step_size` is too big with {} epochs and '
@@ -523,39 +398,19 @@ class DGSTA(AbstractTrafficStateModel):
             self.far_mask[sd_mx < self.far_mask_delta] = 1
             self.far_mask = self.far_mask.bool()
         else:
-            sh_mx = sh_mx.T  # 转置
-            # geo矩阵 距离近的为0，距离远的为1
+            sh_mx = sh_mx.T
             self.geo_mask = torch.zeros(self.num_nodes, self.num_nodes).to(self.device)
-            self.geo_mask[sh_mx >= self.far_mask_delta] = 1  # sh_mx矩阵里大于7的设为1
+            self.geo_mask[sh_mx >= self.far_mask_delta] = 1
             self.geo_mask = self.geo_mask.bool()
-            # self.geo_mask = self.adj_mx.bool()
-            # sem矩阵 距离近的为0，距离远的为1
-            self.sem_mask = torch.ones(self.num_nodes, self.num_nodes).to(self.device)
-            # (170,170) 全为1
-            sem_mask = self.dtw_matrix.argsort(axis=1)[:, :self.dtw_delta]
-            # 对dtw_matrix按行排序求出索引值，将每行前dtw_delta个索引值切割，赋值给sem_mask
-            # (170,5)
-            for i in range(self.sem_mask.shape[0]):
-                self.sem_mask[i][sem_mask[i]] = 0  # 将每行的对应5处位置值设为0
-            # self.sem_mask = torch.load("./libcity/cache/dataset_cache/dtw.npy").to(self.device)
-            self.sem_mask = self.sem_mask.bool()
 
-        # 对pattern_keys做一次全连接，3维扩到64维
-        self.pattern_keys = torch.from_numpy(data_feature.get('pattern_keys')).float().to(self.device)
-        self.pattern_embeddings = nn.ModuleList([
-            TokenEmbedding(self.s_attn_size, self.embed_dim) for _ in range(self.output_dim)
-        ])
 
-        # 对输入进行拉普拉斯、时间、位置嵌入
         self.enc_embed_layer = DataEmbedding(
             self.feature_dim - self.ext_dim, self.embed_dim, lape_dim, self.adj_mx, drop=drop,
             add_time_in_day=add_time_in_day, add_day_in_week=add_day_in_week, device=self.device, num_nodes=self.num_nodes
         )
 
-        #  返回0~0.3，总个数为6的等差数列
         enc_dpr = [x.item() for x in torch.linspace(0, drop_path, enc_depth)]
 
-        #  时空编码
         self.encoder_blocks = nn.ModuleList([
             STEncoderBlock(
                 dim=self.embed_dim, s_attn_size=self.s_attn_size, t_attn_size=self.t_attn_size,
@@ -567,7 +422,6 @@ class DGSTA(AbstractTrafficStateModel):
             ) for i in range(enc_depth)
         ])
 
-        # 跳跃层
         self.skip_convs = nn.ModuleList([
             nn.Conv2d(
                 in_channels=self.embed_dim, out_channels=self.skip_dim, kernel_size=1,
@@ -581,7 +435,7 @@ class DGSTA(AbstractTrafficStateModel):
             in_channels=self.skip_dim, out_channels=self.output_dim, kernel_size=1, bias=True,
         )
 
-        tempp = np.load("/home/liuzemu/DGSTA/libcity/cache/dataset_cache/" + self.dataset + "/tempp.npy")
+        tempp = np.load("/libcity/cache/dataset_cache/" + self.dataset + "/tempp.npy")
         tempp = torch.from_numpy(tempp).to(torch.float32)
         tempp = norm_embedding(tempp)
         self.tempp = self.cal_lape_emb(tempp).to(self.device)
@@ -605,31 +459,13 @@ class DGSTA(AbstractTrafficStateModel):
 
     def forward(self, batch, lap_mx=None):
         x = batch['X']
-        ind = batch['ind']  # new~~~~~~~~~~~~~~~~~~~~~~~
-        T = x.shape[1]
-        x_pattern_list = []
-        for i in range(self.s_attn_size):
-            x_pattern = F.pad(
-                x[:, :T + i + 1 - self.s_attn_size, :, :self.output_dim],
-                (0, 0, 0, 0, self.s_attn_size - 1 - i, 0),
-                "constant", 0,
-            ).unsqueeze(-2)
-            x_pattern_list.append(x_pattern)
-        x_patterns = torch.cat(x_pattern_list, dim=-2)  # (16,12,170,3,1)
-
-        x_pattern_list = []
-        pattern_key_list = []
-        for i in range(self.output_dim):
-            x_pattern_list.append(self.pattern_embeddings[i](x_patterns[..., i]).unsqueeze(-1))  # (16,12,170,64,1)
-            pattern_key_list.append(self.pattern_embeddings[i](self.pattern_keys[..., i]).unsqueeze(-1))  # (16,64,1)
-        x_patterns = torch.cat(x_pattern_list, dim=-1)  # (16,12,170,64,1)
-        pattern_keys = torch.cat(pattern_key_list, dim=-1)  # (16,64,1)
+        ind = batch['ind']
 
         tempp = self.tempp
         enc = self.enc_embed_layer(x, lap_mx, tempp)
         skip = 0
         for i, encoder_block in enumerate(self.encoder_blocks):
-            enc = encoder_block(enc, ind, x_patterns, pattern_keys, self.geo_mask, self.sem_mask)
+            enc = encoder_block(enc, ind, self.geo_mask)
             skip += self.skip_convs[i](enc.permute(0, 3, 2, 1))
 
         skip = self.end_conv1(F.relu(skip.permute(0, 3, 2, 1)))
@@ -653,7 +489,6 @@ class DGSTA(AbstractTrafficStateModel):
             lf = loss.log_cosh_loss
         elif set_loss.lower() == 'huber':  # true
             lf = partial(loss.huber_loss, delta=self.huber_delta)
-            # 返回一个函数，默认delta=2
         elif set_loss.lower() == 'quantile':
             lf = partial(loss.quantile_loss, delta=self.quan_delta)
         elif set_loss.lower() == 'masked_mae':
