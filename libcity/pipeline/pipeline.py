@@ -25,7 +25,6 @@ def run_model(task=None, model_name=None, dataset_name=None, config_file=None,
         exp_id = int(random.SystemRandom().random() * 100000)
         config['exp_id'] = exp_id
     seed = config.get('seed', None)  # 1
-    # 设置随机数种子，为了能复现代码
     if seed is not None:
         random.seed(seed)
         np.random.seed(seed)
@@ -37,32 +36,27 @@ def run_model(task=None, model_name=None, dataset_name=None, config_file=None,
                 format(str(task), str(model_name), str(dataset_name), str(exp_id)))
     logger.info(config.config)
     dataset = get_dataset(config)
-    # get_data() 返回训练集、测试集、验证集的dataloader
     train_data, valid_data, test_data = dataset.get_data()
     data_feature = dataset.get_data_feature()
     model_cache_file = './libcity/cache/{}/model_cache/{}_{}.m'.format(
         exp_id, model_name, dataset_name)
     model = get_model(config, data_feature)
 
-    # 多gpu
     if torch.cuda.device_count() > 1:
         print(f'Using {torch.cuda.device_count()} GPUs')
         model = torch.nn.DataParallel(model, device_ids=[2, 3])
         model = model.to('cuda:2')
     else:
-    # 如果只有一个 GPU 或 CPU，直接将模型移动到可用设备
         model = model.to('cuda:2' if torch.cuda.is_available() else 'cpu')
 
 
     executor = get_executor(config, model)
-    # 训练
     if train or not os.path.exists(model_cache_file):  # true
         executor.train(train_data, valid_data)
         if saved_model:  # true
             executor.save_model(model_cache_file)
     else:
         executor.load_model(model_cache_file)
-    # 评估
     executor.evaluate(test_data)
 
 

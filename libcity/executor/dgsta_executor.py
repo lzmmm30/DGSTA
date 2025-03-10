@@ -280,7 +280,7 @@ class DGSTAExecutor(TrafficStateExecutor):
     def evaluate(self, test_dataloader):
         self._logger.info('Start evaluating ...')
         with torch.no_grad():
-            self.model.eval() 
+            self.model.eval()
             y_truths = []
             y_preds = []
             t1 = time.time()
