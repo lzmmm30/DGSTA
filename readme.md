@@ -24,4 +24,4 @@ python run_model.py --task traffic_state_pred --model DGSTA --dataset PeMS04 --c
 
 ## Acknowledgement
 
-Our code is modified based on [Libcity](https://github.com/LibCity/Bigscity-LibCity), thanks for their contribution.
+Our code is implemented based on [Libcity](https://github.com/LibCity/Bigscity-LibCity), thanks for their contribution.
