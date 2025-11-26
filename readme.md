@@ -1,4 +1,4 @@
-# Dynamic Graph Convolution and Spatio-Temporal Self-Attention Network for Traffic Flow Prediction
+# Dynamic Graph Convolution and Spatio-Temporal Self-Attention Network for Traffic Flow Prediction (DGSTA)
 
 This is a PyTorch implementation of Dynamic Graph Convolution and Spatio-Temporal Self-Attention Network for Traffic Flow Prediction.
 
